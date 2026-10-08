@@ -69,6 +69,18 @@
 - **Coins arrondis du volet** sur mobile : non repris (pas d'arrondi sur la modale DSFR).
 - **FAQ** : les réponses « Comment vérifier si mon logement est raccordé… » et « À quelle fréquence… » sont des textes provisoires (illisibles sur la maquette).
 
+## Écarts avec les maquettes — Carte et choix du secteur
+
+- **Fonds IGN non vérifiés en local** : `data.geopf.fr` est inaccessible depuis l'environnement de développement ; l'affichage des fonds (Plan IGN, photographies aériennes, limites administratives `LIMITES_ADMINISTRATIVES_EXPRESS.LATEST`) est à vérifier sur le site publié. Les vignettes du sélecteur de fond sont de vraies tuiles IGN (Lille, zoom 12).
+- **Contours des secteurs** : polygones approximatifs dessinés pour le prototype (`src/data/secteurs-lille.geojson`), pas de données officielles.
+- **Barre de recherche de la carte** : champ `Input` DSFR + bouton loupe, libellé masqué (lu par les lecteurs d'écran), au lieu du composant `SearchBar` : ce dernier intercepte Entrée et Échap, incompatibles avec la navigation clavier des suggestions. Rendu identique. Mêmes suggestions de communes que l'accueil (décision validée), pas l'API d'adresses Géoplateforme.
+- **Panneau « Fond de carte »** : pas de composant « popover » DSFR. Contenu en composants DSFR (`RadioButtons` riches avec vignette, `ToggleSwitch`), ouvert par un bouton (`aria-expanded`), fermé par Échap (focus rendu au bouton) ou clic en dehors. Positionnement custom.
+- **Contrôles de carte** : boutons DSFR tertiaires (zoom, réglages, retour) posés sur la carte avec un fond et une ombre DSFR. Attribution « © IGN / Géoplateforme » affichée en texte DSFR à la place du contrôle Leaflet.
+- **Cartes de secteur** : `Card` horizontale DSFR. Le DSFR ne passe en horizontal qu'à partir de la tablette et place l'image à gauche ; la maquette mobile montre l'image à droite et une carte horizontale. À trancher (voir questions).
+- **Choix du secteur** : pas de boutons de zoom ni de réglages sur la carte, comme la maquette (déplacement et zoom restent possibles au doigt, à la souris et au clavier).
+- **Mode Baignade sur la carte** : carte seule et alerte DSFR « Bientôt disponible » dans le panneau (décision validée).
+- **Desktop** (pas de maquette) : panneau à gauche (environ un tiers), carte à droite (décision validée).
+
 ## Maquettes à compléter
 
 - `accueil-mobile.webp` (169 px de large) et `modale-detail-analyses.webp` (125 px de large) sont illisibles : versions en taille réelle attendues.
