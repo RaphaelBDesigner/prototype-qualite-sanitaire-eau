@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Accueil } from "./pages/Accueil";
 import { EnConstruction } from "./pages/EnConstruction";
+import { Carte } from "./pages/Carte";
+import { ChoixSecteur } from "./pages/ChoixSecteur";
 import { PageIntrouvable } from "./pages/PageIntrouvable";
 
 export const router = createBrowserRouter(
@@ -10,8 +12,9 @@ export const router = createBrowserRouter(
       element: <Layout />,
       children: [
         { index: true, element: <Accueil /> },
-        { path: "carte", element: <EnConstruction titre="Carte" /> },
-        { path: "commune/:code", element: <EnConstruction titre="Choix du secteur de distribution" /> },
+        { path: "carte", element: <Carte /> },
+        { path: "commune/:code", element: <ChoixSecteur /> },
+        { path: "secteur/:id", element: <EnConstruction titre="Fiche du secteur" /> },
         { path: "article/:slug", element: <EnConstruction titre="Article" /> },
         { path: "faq", element: <EnConstruction titre="Questions fréquentes" /> },
         { path: "accessibilite", element: <EnConstruction titre="Accessibilité" /> },

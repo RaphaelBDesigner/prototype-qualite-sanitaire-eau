@@ -160,3 +160,179 @@
     transition: none;
   }
 }
+
+/* ---------- Écrans carte ----------
+ * Mise en page : carte puis panneau sur mobile, panneau à gauche et carte à droite sur desktop.
+ * Le panneau du bas de la maquette n'a pas d'équivalent DSFR (cf. NOTES.md) : il est fixe, la poignée est décorative. */
+
+.ecran-carte__carte {
+  height: 27.5rem;
+}
+
+.ecran-carte__carte:has(.carte-ign--secteurs) {
+  height: 19rem;
+}
+
+.ecran-carte__panneau {
+  background-color: var(--background-default-grey);
+}
+
+.ecran-carte__poignee {
+  width: 3rem;
+  height: 0.25rem;
+  margin: 0.75rem auto 0;
+  background-color: var(--border-default-grey);
+}
+
+@media (min-width: 62em) {
+  .ecran-carte__corps {
+    display: grid;
+    grid-template-columns: minmax(22rem, 1fr) 2fr;
+    height: min(80vh, 48rem);
+    border-bottom: 1px solid var(--border-default-grey);
+  }
+
+  .ecran-carte__carte,
+  .ecran-carte__carte:has(.carte-ign--secteurs) {
+    order: 2;
+    height: 100%;
+  }
+
+  .ecran-carte__panneau {
+    order: 1;
+    overflow-y: auto;
+    border-right: 1px solid var(--border-default-grey);
+  }
+
+  .ecran-carte__poignee {
+    display: none;
+  }
+}
+
+/* ---------- Carte IGN : contrôles restylés avec les tokens DSFR ---------- */
+
+.carte-ign {
+  position: relative;
+  height: 100%;
+}
+
+.carte-ign__carte {
+  height: 100%;
+  width: 100%;
+  font-family: inherit;
+  background-color: var(--background-alt-grey);
+}
+
+.carte-ign__controles,
+.carte-ign__retour,
+.carte-ign__legende,
+.carte-ign__attribution {
+  position: absolute;
+  z-index: 1000; /* au-dessus des couches Leaflet */
+}
+
+.carte-ign__controles {
+  right: 1rem;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.carte-ign__zoom,
+.carte-ign__reglages > .fr-btn,
+.carte-ign__retour {
+  background-color: var(--background-default-grey);
+  box-shadow: var(--raised-shadow);
+}
+
+.carte-ign__zoom {
+  display: flex;
+  flex-direction: column;
+}
+
+.carte-ign__reglages {
+  position: relative;
+}
+
+.carte-ign__retour {
+  top: 1rem;
+  left: 1rem;
+}
+
+.carte-ign__attribution {
+  left: 0;
+  bottom: 0;
+  padding: 0 0.25rem;
+  background-color: var(--background-default-grey);
+  color: var(--text-mention-grey);
+}
+
+.carte-ign__legende {
+  right: 0.5rem;
+  bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--background-default-grey);
+  box-shadow: var(--raised-shadow);
+}
+
+.panneau-fond-carte {
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  bottom: 0;
+  width: min(20rem, calc(100vw - 6rem));
+  background-color: var(--background-overlap-grey);
+  box-shadow: var(--overlap-shadow);
+}
+
+.panneau-fond-carte .fr-fieldset {
+  margin-bottom: 0;
+}
+
+/* Zones (secteurs de distribution) et position de l'utilisateur. */
+.carte-ign__zone {
+  fill: var(--background-action-high-blue-france);
+  fill-opacity: 0.15;
+  stroke: var(--border-action-high-blue-france);
+  stroke-width: 2;
+}
+
+.carte-ign__zone:hover {
+  fill-opacity: 0.35;
+}
+
+.carte-ign__position {
+  fill: var(--background-action-high-blue-france);
+  fill-opacity: 1;
+  stroke: var(--background-default-grey);
+  stroke-width: 3;
+}
+
+.carte-ign__carte .leaflet-tooltip {
+  font-family: inherit;
+  color: var(--text-default-grey);
+  background-color: var(--background-overlap-grey);
+  border-color: var(--border-default-grey);
+  box-shadow: var(--overlap-shadow);
+}
+
+/* Vignette des secteurs dans les cartes DSFR. */
+.mini-carte-secteur {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.mini-carte-secteur path {
+  fill: var(--background-action-low-blue-france);
+  stroke: var(--border-default-blue-france);
+  stroke-width: 0.75;
+}
+
+.mini-carte-secteur path.mini-carte-secteur__actif {
+  fill: var(--background-action-high-blue-france);
+}
