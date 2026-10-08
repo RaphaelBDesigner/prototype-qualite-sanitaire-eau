@@ -3,10 +3,12 @@ import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
 import { fr } from "@codegouvfr/react-dsfr";
 import { NoteQualite } from "./NoteQualite";
 import { useBoutonVolet } from "../lib/contexteVolets";
+import { bilanPrelevements } from "../lib/analyses";
 
 /** Section « Mesure de la qualité de votre eau » : bilan 2025 noté, bilan 2026 en cours. */
-export function MesureQualite() {
+export function MesureQualite({ codeUdi }: { codeUdi: string }) {
   const boutonVolet = useBoutonVolet();
+  const { conformes, depassements } = bilanPrelevements(codeUdi);
   return (
     <section className={fr.cx("fr-mb-6w")} aria-labelledby="titre-mesure">
       <h2 id="titre-mesure" className={fr.cx("fr-h4")}>
@@ -26,15 +28,17 @@ export function MesureQualite() {
         <li className="ligne-icone">
           <span className={`${fr.cx("fr-icon-checkbox-circle-fill", "fr-icon--sm")} fr-text-default--info`} aria-hidden="true" />
           <span>
-            <strong>5</strong> prélèvements conformes
+            <strong>{conformes}</strong> prélèvement{conformes > 1 ? "s" : ""} conforme{conformes > 1 ? "s" : ""}
           </span>
         </li>
-        <li className="ligne-icone">
-          <span className={`${fr.cx("fr-icon-warning-fill", "fr-icon--sm")} fr-text-default--warning`} aria-hidden="true" />
-          <span>
-            <strong>1</strong> dépassement de limite réglementaire
-          </span>
-        </li>
+        {depassements > 0 && (
+          <li className="ligne-icone">
+            <span className={`${fr.cx("fr-icon-warning-fill", "fr-icon--sm")} fr-text-default--warning`} aria-hidden="true" />
+            <span>
+              <strong>{depassements}</strong> dépassement{depassements > 1 ? "s" : ""} de limite réglementaire
+            </span>
+          </li>
+        )}
       </ul>
       <p className={`${fr.cx("fr-text--sm")} fr-text-mention--grey`}>
         La note 2026 sera attribuée en cours d’année 2027, une fois tous les prélèvements réalisés et interprétés.

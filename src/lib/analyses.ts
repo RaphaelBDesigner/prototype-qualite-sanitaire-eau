@@ -1,3 +1,5 @@
+import { secteurParCode } from "./secteurs";
+
 /**
  * Résultats d'analyses du prototype (données fictives).
  * Pesticides et Dureté reprennent les valeurs des maquettes ; les autres paramètres sont générés
@@ -277,20 +279,38 @@ function generer(definition: Definition, codeUdi: string): Parametre {
 
 const cache = new Map<string, Parametre[]>();
 
+/** Ordre de la maquette : Pesticides en tête des paramètres sanitaires, Dureté en tête des caractéristiques (avant Calcium). */
+const indexCalcium = (parametres: Parametre[]) => parametres.findIndex((p) => p.id === "calcium");
+
+/** Pesticides d'un secteur sans restriction : mêmes substances, valeurs restées sous la limite de 0,1 µg/L. */
+const PESTICIDES_CONFORMES: Parametre = {
+  ...PESTICIDES,
+  indicateurs: PESTICIDES.indicateurs.map((indicateur, i) => ({
+    ...indicateur,
+    mesures: serie(i === 0 ? [0.037, 0.022, 0.037, 0.037, 0.048, 0.052] : [0.041, 0.035, 0.048, 0.052, 0.058, 0.061]),
+  })),
+};
+
 /** Tous les paramètres analysés pour une UDI. */
 export function parametresDeLUdi(codeUdi: string): Parametre[] {
   const enCache = cache.get(codeUdi);
   if (enCache) return enCache;
   const generes = DEFINITIONS.map((definition) => generer(definition, codeUdi));
-  // Un paramètre en dépassement par UDI (2 dépassements), choisi de façon déterministe parmi les références de qualité,
-  // pour que le filtre « Dépassement de limite » ait un résultat (Pesticides : 1 dépassement, donc « À surveiller »).
+  const sansRestriction = secteurParCode(codeUdi)?.secteur.properties.statut === "aucune";
+  // Cohérence avec la situation du secteur : sans restriction connue, aucun paramètre ne dépasse son seuil
+  // (les valeurs générées restent sous le seuil, et les pesticides restent sous 0,1 µg/L).
+  if (sansRestriction) {
+    const parametres = [PESTICIDES_CONFORMES, ...generes.slice(0, indexCalcium(generes)), DURETE, ...generes.slice(indexCalcium(generes))];
+    cache.set(codeUdi, parametres);
+    return parametres;
+  }
+  // Secteur avec restriction ou interdiction : Pesticides (1 dépassement, « À surveiller ») et une référence de qualité
+  // choisie de façon déterministe (2 dépassements, « Dépassement de limite »).
   const candidats = generes.filter((p) => p.groupe === "reference" && (p.indicateurs[0].limite ?? 0) > 0);
   const choisi = candidats[Math.floor(aleatoire(codeUdi)() * candidats.length)].indicateurs[0];
   const valeurDepassement = Number(((choisi.limite ?? 0) * 1.2).toPrecision(2));
   choisi.mesures = choisi.mesures.map((m, i) => (i >= choisi.mesures.length - 2 ? { ...m, valeur: valeurDepassement } : m));
-  // Ordre de la maquette : Pesticides en tête des paramètres sanitaires, Dureté en tête des caractéristiques.
-  const indexCalcium = generes.findIndex((p) => p.id === "calcium");
-  const parametres = [PESTICIDES, ...generes.slice(0, indexCalcium), DURETE, ...generes.slice(indexCalcium)];
+  const parametres = [PESTICIDES, ...generes.slice(0, indexCalcium(generes)), DURETE, ...generes.slice(indexCalcium(generes))];
   cache.set(codeUdi, parametres);
   return parametres;
 }
@@ -321,6 +341,15 @@ export function etatParametre(parametre: Parametre): EtatParametre {
 
 export function etatIndicateur(indicateur: Indicateur): EtatParametre {
   return etatSelonDepassements(indicateur.mesures.filter((m) => depasse(indicateur, m)).length);
+}
+
+/** Bilan des prélèvements de la période : un prélèvement est en dépassement si au moins un paramètre y dépasse son seuil. */
+export function bilanPrelevements(codeUdi: string) {
+  const parametres = parametresDeLUdi(codeUdi);
+  const depassements = DATES_PRELEVEMENTS.filter((date) =>
+    parametres.some((p) => p.indicateurs.some((indicateur) => indicateur.mesures.some((m) => m.date === date && depasse(indicateur, m)))),
+  ).length;
+  return { conformes: DATES_PRELEVEMENTS.length - depassements, depassements };
 }
 
 /** Format français : virgule décimale. */

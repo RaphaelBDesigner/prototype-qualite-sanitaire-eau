@@ -4,9 +4,8 @@ import { parametre } from "../lib/analyses";
 import type { StatutSecteur } from "../lib/secteurs";
 
 /** Volet « Origine de cette restriction / interdiction » : les paramètres en dépassement. */
-export function VoletOrigine({ statut }: { statut: StatutSecteur }) {
-  // Les valeurs des pesticides sont identiques pour toutes les UDI du prototype.
-  const pesticides = parametre("", "pesticides");
+export function VoletOrigine({ codeUdi, statut }: { codeUdi: string; statut: StatutSecteur }) {
+  const pesticides = parametre(codeUdi, "pesticides");
   const mesure = statut === "interdiction" ? "L’interdiction" : "La restriction";
   return (
     <>

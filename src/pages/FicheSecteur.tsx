@@ -81,7 +81,7 @@ export function FicheSecteur() {
               </CallOut>
             </section>
 
-            <MesureQualite />
+            <MesureQualite codeUdi={id} />
 
             <VotreSecteur secteur={secteur} infos={infos} />
 

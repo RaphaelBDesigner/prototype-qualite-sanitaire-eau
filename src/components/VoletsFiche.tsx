@@ -118,7 +118,7 @@ function rendu(entree: EntreeVolet | undefined, { codeUdi, statut, infos }: Omit
     case "origine":
       return {
         titre: `Origine de cette ${statut === "interdiction" ? "interdiction" : "restriction"}`,
-        contenu: <VoletOrigine statut={statut} />,
+        contenu: <VoletOrigine codeUdi={codeUdi} statut={statut} />,
       };
     case "analyses":
       return { titre: "Détails des analyses", contenu: <VoletAnalyses codeUdi={codeUdi} /> };
