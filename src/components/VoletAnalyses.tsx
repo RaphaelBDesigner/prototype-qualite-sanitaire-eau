@@ -68,7 +68,7 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
       />
       <hr className={fr.cx("fr-mt-1w", "fr-pb-3w")} />
 
-      <h2 className={fr.cx("fr-h6", "fr-mb-2w")}>Rechercher un paramètre</h2>
+      <h2 className={fr.cx("fr-h6", "fr-mb-2w")}>Rechercher les derniers résultats d’un paramètre</h2>
       <Input
         label="Nom du paramètre"
         hideLabel
