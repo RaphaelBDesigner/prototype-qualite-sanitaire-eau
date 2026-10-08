@@ -127,7 +127,7 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
         if (lignes.length === 0) return null;
         return (
           <section key={groupe.id} className="groupe-parametres fr-mb-3w" aria-labelledby={`${id}-${groupe.id}`}>
-            <div className="groupe-parametres__titre fr-py-1w fr-px-2w">
+            <div className="groupe-parametres__titre fr-py-3v fr-px-2w">
               <h3 id={`${id}-${groupe.id}`} className={fr.cx("fr-text--sm", "fr-text--bold", "fr-mb-0")}>
                 {groupe.titre}
               </h3>
@@ -144,18 +144,15 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
                       className="ligne-parametre"
                       onClick={() => empiler({ type: "parametre", id: parametre.id }, idLigne)}
                     >
-                      <span className={fr.cx("fr-text--sm", "fr-mb-0")}>
-                        {parametre.nom}
-                        {parametre.nbSubstances && parametre.nbSubstances > 1 && (
-                          <span className="fr-text-mention--grey"> ({parametre.nbSubstances} paramètres)</span>
-                        )}
+                      <span className="ligne-parametre__texte fr-text--sm fr-mb-0">
+                        <span>
+                          {parametre.nom}
+                          {parametre.nbSubstances && parametre.nbSubstances > 1 && (
+                            <span className="fr-text-mention--grey"> ({parametre.nbSubstances} paramètres)</span>
+                          )}
+                        </span>
                         {/* Dans la liste, seuls les paramètres à surveiller ou en dépassement ont un badge, sans icône. */}
-                        {etat !== "conforme" && (
-                          <>
-                            <br />
-                            <BadgeEtat etat={etat} sansIcone />
-                          </>
-                        )}
+                        {etat !== "conforme" && <BadgeEtat etat={etat} sansIcone />}
                       </span>
                       <span className={fr.cx("fr-icon-arrow-right-line")} aria-hidden="true" />
                     </button>
