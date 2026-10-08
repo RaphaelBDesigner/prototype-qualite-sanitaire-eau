@@ -18,11 +18,11 @@ function LienArticle({ slug, children }: { slug: string; children: string }) {
 
 export function FaqAccueil() {
   return (
-    <section className={fr.cx("fr-container", "fr-py-6w")} aria-labelledby="titre-faq">
+    <section className={fr.cx("fr-container", "fr-pt-5w", "fr-pb-6w")} aria-labelledby="titre-faq">
       <h2 id="titre-faq">Questions fréquentes</h2>
       <div className={fr.cx("fr-accordions-group", "fr-mb-4w")}>
         <Accordion label="Eau potable : les sujets qui intéressent" titleAs="h3">
-          <ul className={fr.cx("fr-raw-list")}>
+          <ul className={fr.cx("fr-raw-list", "fr-px-2w", "fr-px-md-0")}>
             <li className={fr.cx("fr-mb-2w")}>
               <button type="button" className={cx(CLASSES_LIEN, "lien-bouton")} {...voletCalcaire.buttonProps}>
                 Calcaire et dureté
@@ -34,7 +34,7 @@ export function FaqAccueil() {
           </ul>
         </Accordion>
         <Accordion label="Eau de baignade : les sujets qui intéressent" titleAs="h3">
-          <ul className={fr.cx("fr-raw-list")}>
+          <ul className={fr.cx("fr-raw-list", "fr-px-2w", "fr-px-md-0")}>
             <LienArticle slug="cyanobacteries">Cyanobactéries</LienArticle>
             <LienArticle slug="bacteries-fecales">Bactéries fécales</LienArticle>
             <LienArticle slug="pollution-apres-la-pluie">Pollution après la pluie</LienArticle>
