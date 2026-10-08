@@ -1,5 +1,5 @@
 import { useId, useState, type ReactNode } from "react";
-import { Badge } from "@codegouvfr/react-dsfr/Badge";
+import { BadgeEtat } from "./BadgeEtat";
 import { SegmentedControl } from "@codegouvfr/react-dsfr/SegmentedControl";
 import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
 import { CallOut } from "@codegouvfr/react-dsfr/CallOut";
@@ -7,7 +7,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { QuestionFaq } from "./QuestionFaq";
 import { GraphiqueEvolution } from "./GraphiqueEvolution";
 import { TableauPrelevements } from "./TableauPrelevements";
-import { depasse, formaterDate, formaterValeur, type Indicateur, type Mesure } from "../lib/analyses";
+import { depasse, etatIndicateur, formaterDate, formaterValeur, type Indicateur, type Mesure } from "../lib/analyses";
 import { conclusionPrelevement } from "../lib/conclusions";
 import type { StatutSecteur } from "../lib/secteurs";
 
@@ -40,11 +40,7 @@ export function BlocIndicateur({ indicateur, statut, complement, titreAs: Titre 
       </p>
       <p className={fr.cx("fr-text--lg", "fr-text--bold", "fr-mb-1w")}>
         {formaterValeur(derniere.valeur)} {unite}{" "}
-        {depasse(indicateur, derniere) && (
-          <Badge severity="error" noIcon className={fr.cx("fr-ml-1w")}>
-            Dépassement de limite
-          </Badge>
-        )}
+        <BadgeEtat etat={etatIndicateur(indicateur)} className={fr.cx("fr-ml-1w")} />
       </p>
       <p className={`${fr.cx("fr-text--sm", "fr-mb-2w")} fr-text-mention--grey`}>Dernier prélèvement du {formaterDate(derniere.date)}</p>
       <p>{indicateur.description}</p>

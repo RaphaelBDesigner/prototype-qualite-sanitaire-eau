@@ -2,7 +2,7 @@ import { useId, useMemo, useRef, useState } from "react";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { Tag } from "@codegouvfr/react-dsfr/Tag";
-import { Badge } from "@codegouvfr/react-dsfr/Badge";
+import { BadgeEtat } from "./BadgeEtat";
 import { Tooltip } from "@codegouvfr/react-dsfr/Tooltip";
 import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -149,14 +149,8 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
                         {parametre.nbSubstances && parametre.nbSubstances > 1 && (
                           <span className="fr-text-mention--grey"> ({parametre.nbSubstances} paramètres)</span>
                         )}
-                        {etat !== "conforme" && (
-                          <>
-                            <br />
-                            <Badge small severity={etat === "depassement" ? "error" : "warning"} noIcon as="span">
-                              {etat === "depassement" ? "Dépassement de limite" : "À surveiller"}
-                            </Badge>
-                          </>
-                        )}
+                        <br />
+                        <BadgeEtat etat={etat} />
                       </span>
                       <span className={fr.cx("fr-icon-arrow-right-line")} aria-hidden="true" />
                     </button>

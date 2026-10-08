@@ -250,7 +250,7 @@ function generer(definition: Definition, codeUdi: string): Parametre {
   const valeurs = DATES_PRELEVEMENTS.map(() => {
     if (typique === 0) return 0;
     const v = typique * (0.6 + hasard() * 0.8);
-    // Valeurs « à surveiller » : quelques paramètres approchent la limite (sans la dépasser).
+    // Les valeurs générées restent sous le seuil (les dépassements sont placés explicitement).
     return limite !== undefined && v > limite * 0.95 ? limite * 0.9 : v;
   });
   const precision = typique >= 10 ? 1 : typique >= 1 ? 2 : 3;
@@ -282,11 +282,12 @@ export function parametresDeLUdi(codeUdi: string): Parametre[] {
   const enCache = cache.get(codeUdi);
   if (enCache) return enCache;
   const generes = DEFINITIONS.map((definition) => generer(definition, codeUdi));
-  // Un paramètre « à surveiller » par UDI, choisi de façon déterministe parmi ceux qui ont une limite.
-  const candidats = generes.filter((p) => p.indicateurs[0].limite);
-  const surveille = candidats[Math.floor(aleatoire(codeUdi)() * candidats.length)];
-  const mesures = surveille.indicateurs[0].mesures;
-  mesures[mesures.length - 1] = { ...mesures[mesures.length - 1], valeur: Number(((surveille.indicateurs[0].limite ?? 0) * 0.85).toPrecision(2)) };
+  // Un paramètre en dépassement par UDI (2 dépassements), choisi de façon déterministe parmi les références de qualité,
+  // pour que le filtre « Dépassement de limite » ait un résultat (Pesticides : 1 dépassement, donc « À surveiller »).
+  const candidats = generes.filter((p) => p.groupe === "reference" && (p.indicateurs[0].limite ?? 0) > 0);
+  const choisi = candidats[Math.floor(aleatoire(codeUdi)() * candidats.length)].indicateurs[0];
+  const valeurDepassement = Number(((choisi.limite ?? 0) * 1.2).toPrecision(2));
+  choisi.mesures = choisi.mesures.map((m, i) => (i >= choisi.mesures.length - 2 ? { ...m, valeur: valeurDepassement } : m));
   // Ordre de la maquette : Pesticides en tête des paramètres sanitaires, Dureté en tête des caractéristiques.
   const indexCalcium = generes.findIndex((p) => p.id === "calcium");
   const parametres = [PESTICIDES, ...generes.slice(0, indexCalcium), DURETE, ...generes.slice(indexCalcium)];
@@ -298,19 +299,28 @@ export function parametre(codeUdi: string, idParametre: string) {
   return parametresDeLUdi(codeUdi).find((p) => p.id === idParametre);
 }
 
-const derniere = (indicateur: Indicateur) => indicateur.mesures[indicateur.mesures.length - 1];
-
 export function depasse(indicateur: Indicateur, mesure: Mesure) {
   return indicateur.limite !== undefined && mesure.valeur > indicateur.limite;
 }
 
-/** État d'un paramètre d'après son dernier prélèvement. */
+/** Statut selon le nombre de dépassements sur la période affichée : 0 conforme, 1 à surveiller, 2 ou plus dépassement. */
+function etatSelonDepassements(nombre: number): EtatParametre {
+  return nombre === 0 ? "conforme" : nombre === 1 ? "surveiller" : "depassement";
+}
+
+/** Nombre de prélèvements de la période où au moins un indicateur du paramètre dépasse son seuil. */
+export function nbDepassements(parametre: Parametre) {
+  return DATES_PRELEVEMENTS.filter((date) =>
+    parametre.indicateurs.some((indicateur) => indicateur.mesures.some((m) => m.date === date && depasse(indicateur, m))),
+  ).length;
+}
+
 export function etatParametre(parametre: Parametre): EtatParametre {
-  if (parametre.indicateurs.some((indicateur) => depasse(indicateur, derniere(indicateur)))) return "depassement";
-  const proche = parametre.indicateurs.some(
-    (indicateur) => indicateur.limite !== undefined && indicateur.limite > 0 && derniere(indicateur).valeur >= indicateur.limite * 0.8,
-  );
-  return proche ? "surveiller" : "conforme";
+  return etatSelonDepassements(nbDepassements(parametre));
+}
+
+export function etatIndicateur(indicateur: Indicateur): EtatParametre {
+  return etatSelonDepassements(indicateur.mesures.filter((m) => depasse(indicateur, m)).length);
 }
 
 /** Format français : virgule décimale. */
