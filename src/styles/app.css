@@ -1,0 +1,128 @@
+/*
+ * Styles de mise en page uniquement : grille et utilitaires DSFR d'abord,
+ * couleurs et ombres via les tokens DSFR. Les exceptions sont listées dans NOTES.md.
+ */
+
+/* ---------- Accueil ---------- */
+
+.accueil-intro {
+  background-color: var(--background-alt-blue-france);
+}
+
+.bloc-recherche {
+  background-color: var(--background-default-grey);
+  box-shadow: var(--raised-shadow);
+}
+
+/* ---------- Icône Baignade (exception validée, cf. NOTES.md) ----------
+ * Les règles génériques du DSFR s'appliquent à toute classe « fr-icon-* » :
+ * il suffit de fournir le masque. */
+.fr-icon-pool-line::before,
+.fr-icon-pool-line::after {
+  -webkit-mask-image: url("/icons/pool.svg");
+  mask-image: url("/icons/pool.svg");
+}
+
+/* ---------- Champ avec suggestions (pas d'autocomplétion DSFR, cf. NOTES.md) ---------- */
+
+.champ-suggestions {
+  position: relative;
+}
+
+.champ-suggestions__liste {
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  right: 0;
+  margin: -1rem 0 0; /* compense la marge basse du groupe de champ DSFR */
+  padding: 0;
+  list-style: none;
+  max-height: 20rem;
+  overflow-y: auto;
+  background-color: var(--background-overlap-grey);
+  box-shadow: var(--overlap-shadow);
+}
+
+.champ-suggestions__liste[hidden] {
+  display: none;
+}
+
+.champ-suggestions__option {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: var(--text-default-grey);
+}
+
+.champ-suggestions__option + .champ-suggestions__option {
+  box-shadow: inset 0 1px 0 0 var(--border-default-grey);
+}
+
+.champ-suggestions__option:hover {
+  background-color: var(--background-overlap-grey-hover);
+}
+
+.champ-suggestions__option[aria-selected="true"] {
+  background-color: var(--background-action-low-blue-france);
+  color: var(--text-action-high-blue-france);
+}
+
+.champ-suggestions__option span + span {
+  color: var(--text-mention-grey);
+}
+
+/* ---------- Volets (exception validée, cf. NOTES.md) ----------
+ * Modale DSFR conservée (focus piégé, Échap, clic sur le fond, ARIA) :
+ * sur mobile elle reste ancrée en bas (natif DSFR) et monte depuis le bas ;
+ * sur desktop elle est ancrée à droite, sur toute la hauteur, et arrive par la droite. */
+
+.volet .fr-modal__body {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.volet.fr-modal--opened .fr-modal__body {
+  transform: none;
+}
+
+@media (min-width: 48em) {
+  .volet::before,
+  .volet::after {
+    content: none;
+  }
+
+  .volet > .fr-container {
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .volet .fr-grid-row {
+    height: 100%;
+    margin: 0;
+    justify-content: flex-end;
+  }
+
+  .volet .fr-grid-row > [class*="fr-col"] {
+    flex: 0 0 32rem;
+    max-width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
+  .volet .fr-modal__body {
+    --modal-max-height: 100vh;
+    max-height: 100vh;
+    height: 100%;
+    margin: 0;
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .volet .fr-modal__body {
+    transition: none;
+  }
+}

@@ -49,6 +49,23 @@
 
 - **Visuels 16:9** : convertis en WebP (`public/images/Visuel_16_9_{1,2,3,4}.webp`, 30 à 70 Ko chacun au lieu de 5 à 6 Mo), recadrés comme dans l'export Figma. Ordre des cartes de l'accueil : 1 « Qui s'occupe de mon eau ? », 2 « Quels contrôles pour l'eau potable ? », 3 « Qu'est-ce que le classement des eaux de baignade ? », 4 « Quels contrôles pour l'eau de baignade ? ».
 
+## Socle technique
+
+- **Version DSFR** : `@codegouvfr/react-dsfr` 1.35 embarque le DSFR **1.14.2** (et non 1.15.x comme indiqué dans `CLAUDE.md`). À mettre à jour quand react-dsfr passera en 1.15.
+- **Communes** : `src/data/communes.json` est généré depuis le référentiel officiel `@etalab/decoupage-administratif` (`npm run generer:communes`), trié par population. Il n'est chargé qu'à la première saisie (≈ 490 Ko compressé). L'API Géoplateforme est réservée à la recherche d'adresse sur la carte.
+- **Routes non encore construites** (carte, choix du secteur, articles, FAQ, pages du footer) : page « en construction ».
+
+## Écarts avec les maquettes — Accueil
+
+- **Intitulé du service** : les maquettes varient (« Qualité sanitaire des eaux », « Contrôle sanitaire des eaux », « Qualité de l'eau »). Retenu : « Qualité de l'eau » / « Suivez la qualité de l'eau en France », cohérent avec le texte du footer. À confirmer.
+- **Liens du footer** : le composant DSFR affiche le nom de domaine (`eaufrance.fr`, `vigieau.gouv.fr`) et non « EauFrance », « VigiEau ». L'ordre des liens du bas est celui du composant (Plan du site, Accessibilité, Mentions légales, puis les autres).
+- **Contrôle segmenté** : les deux options ne s'étirent pas sur toute la largeur du bloc, comportement natif du DSFR.
+- **Icône Eau potable** : `fr-icon-drop-line` (DSFR) à la place de `water_drop.svg`.
+- **Badges des cartes** : couleur `purple-glycine`, la plus proche du rose de la maquette.
+- **« Bon à savoir »** : `CallOut` en variante `blue-ecume`, la plus proche du fond bleu clair de la maquette.
+- **Coins arrondis du volet** sur mobile : non repris (pas d'arrondi sur la modale DSFR).
+- **FAQ** : les réponses « Comment vérifier si mon logement est raccordé… » et « À quelle fréquence… » sont des textes provisoires (illisibles sur la maquette).
+
 ## Maquettes à compléter
 
 - `accueil-mobile.webp` (169 px de large) et `modale-detail-analyses.webp` (125 px de large) sont illisibles : versions en taille réelle attendues.
