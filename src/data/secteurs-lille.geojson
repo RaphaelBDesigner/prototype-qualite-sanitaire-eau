@@ -1,0 +1,63 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "commune": "Lille",
+    "codeInsee": "59350",
+    "source": "Contours approximatifs dessinés pour le prototype, d'après la maquette (pas de données officielles)."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "lille-centre",
+        "nom": "Lille Centre",
+        "communes": ["Lille"],
+        "precision": "quartiers : centre-ville, Vieux-Lille, Saint-Maurice-Pellevoisin",
+        "statut": "restriction"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[3.020, 50.640], [3.035, 50.655], [3.060, 50.660], [3.085, 50.650], [3.095, 50.635], [3.085, 50.620], [3.060, 50.612], [3.035, 50.618], [3.020, 50.640]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "lille-sud",
+        "nom": "Lille Sud",
+        "communes": ["Faches-Thumesnil", "Ronchin", "Lesquin", "Vendeville", "Wattignies", "Templemars", "Houplin-Ancoisne", "Seclin"],
+        "statut": "aucune"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[3.000, 50.585], [3.035, 50.618], [3.060, 50.612], [3.085, 50.620], [3.120, 50.600], [3.125, 50.575], [3.090, 50.545], [3.050, 50.535], [3.005, 50.545], [2.990, 50.565], [3.000, 50.585]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "lille-est",
+        "nom": "Lille Est",
+        "communes": ["Mons-en-Barœul", "Forest-sur-Marque", "Tressin", "Chéreng"],
+        "statut": "aucune"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[3.085, 50.650], [3.105, 50.660], [3.160, 50.660], [3.215, 50.650], [3.225, 50.625], [3.190, 50.605], [3.150, 50.610], [3.120, 50.600], [3.085, 50.620], [3.095, 50.635], [3.085, 50.650]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "lambersart",
+        "nom": "Lambersart",
+        "communes": ["Lambersart", "Pérenchies", "Saint-André-lez-Lille", "Capinghem", "Englos", "Loos", "Haubourdin", "Santes"],
+        "statut": "aucune"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[2.930, 50.670], [2.990, 50.680], [3.040, 50.672], [3.060, 50.660], [3.035, 50.655], [3.020, 50.640], [3.035, 50.618], [3.000, 50.585], [2.960, 50.590], [2.930, 50.615], [2.915, 50.645], [2.930, 50.670]]]
+      }
+    }
+  ]
+}
