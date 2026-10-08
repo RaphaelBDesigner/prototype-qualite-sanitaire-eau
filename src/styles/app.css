@@ -357,3 +357,266 @@
 .mini-carte-secteur path.mini-carte-secteur__actif {
   fill: var(--background-action-high-blue-france);
 }
+
+/* ---------- Fiche du secteur ---------- */
+
+/* État d'usage : mise en avant DSFR, bordure à la couleur de l'état (cf. NOTES.md). */
+.etat-usage--interdiction {
+  background-image: linear-gradient(0deg, var(--border-plain-error), var(--border-plain-error));
+}
+
+.etat-usage--restriction {
+  background-image: linear-gradient(0deg, var(--border-plain-warning), var(--border-plain-warning));
+}
+
+.etat-usage--aucune {
+  background-image: linear-gradient(0deg, var(--border-plain-info), var(--border-plain-info));
+}
+
+.etat-usage__usage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Note de qualité A à D (pas d'équivalent DSFR, cf. NOTES.md). */
+.note-qualite {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+
+.note-qualite__lettre {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.note-qualite__lettre--a {
+  color: var(--text-default-info);
+  background-color: var(--background-contrast-info);
+}
+
+.note-qualite__lettre--b {
+  color: var(--text-default-success);
+  background-color: var(--background-contrast-success);
+}
+
+.note-qualite__lettre--c {
+  color: var(--text-label-yellow-tournesol);
+  background-color: var(--background-contrast-yellow-tournesol);
+}
+
+.note-qualite__lettre--d {
+  color: var(--text-default-error);
+  background-color: var(--background-contrast-error);
+}
+
+.note-qualite__lettre--active {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  color: var(--text-inverted-info);
+  background-color: var(--background-flat-info);
+}
+
+.note-qualite__libelle {
+  font-weight: 700;
+  color: var(--text-default-info);
+}
+
+.ligne-icone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Blocs de contenu des volets (aucun équivalent DSFR de carte à contenu libre, cf. NOTES.md). */
+.bloc-indicateur {
+  border: 1px solid var(--border-default-grey);
+  background-color: var(--background-default-grey);
+}
+
+/* Carte du secteur dans la fiche. */
+.carte-fiche {
+  height: 17rem;
+}
+
+.legende-zone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Étapes de l'eau jusqu'au robinet (liste numérotée, pas d'équivalent DSFR, cf. NOTES.md). */
+.etapes-eau {
+  --ol-content: none;
+  list-style: none;
+  counter-reset: etape;
+  padding: 0;
+  margin-left: 0;
+}
+
+.etapes-eau > li {
+  list-style: none;
+  counter-increment: etape;
+  position: relative;
+  padding: 0 0 1rem 2.75rem;
+  margin: 0;
+}
+
+.etapes-eau > li::before {
+  content: counter(etape);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-inverted-blue-france);
+  background-color: var(--background-active-blue-france);
+  border-radius: 50%;
+}
+
+.etapes-eau > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  top: 1.75rem;
+  bottom: 0.25rem;
+  border-left: 1px solid var(--border-default-grey);
+}
+
+/* Coordonnées de la mairie. */
+.liste-coordonnees {
+  margin: 0 0 1.5rem;
+}
+
+.liste-coordonnees > div {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border-default-grey);
+}
+
+.liste-coordonnees > div:last-child {
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
+.liste-coordonnees dt {
+  font-size: 0.875rem;
+  color: var(--text-mention-grey);
+}
+
+.liste-coordonnees dd {
+  margin: 0;
+}
+
+/* Liste des paramètres du volet Analyses. */
+.titre-groupe-parametres {
+  background-color: var(--background-alt-blue-france);
+}
+
+.ligne-parametre {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-default-grey);
+  color: var(--text-default-grey);
+}
+
+.ligne-parametre > [class*="fr-icon-"] {
+  flex: none;
+  color: var(--text-action-high-blue-france);
+}
+
+/* Graphique d'évolution (SVG, couleurs DSFR). */
+.graphique-evolution {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.graphique-evolution__grille {
+  stroke: var(--border-default-grey);
+  stroke-width: 1;
+}
+
+.graphique-evolution__texte {
+  font-size: 10px;
+  fill: var(--text-mention-grey);
+}
+
+.graphique-evolution__texte--actif {
+  font-weight: 700;
+  fill: var(--text-title-grey);
+}
+
+.graphique-evolution__limite {
+  stroke: var(--border-plain-warning);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+.graphique-evolution__selection {
+  stroke: var(--border-action-high-blue-france);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.graphique-evolution__courbe {
+  fill: none;
+  stroke: var(--text-title-grey);
+  stroke-width: 1.5;
+}
+
+.graphique-evolution__point {
+  fill: var(--text-title-grey);
+}
+
+.graphique-evolution__point--depassement {
+  fill: var(--border-plain-warning);
+}
+
+.legende-graphique {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.legende-graphique__symbole {
+  flex: none;
+  width: 0.75rem;
+}
+
+.legende-graphique__symbole--valeur {
+  height: 0.75rem;
+  background-color: var(--text-title-grey);
+}
+
+.legende-graphique__symbole--limite {
+  border-top: 2px dashed var(--border-plain-warning);
+}
+
+.legende-graphique__symbole--selection {
+  border-top: 2px dashed var(--border-action-high-blue-france);
+}
+
+.tableau-prelevements__ligne {
+  cursor: pointer;
+}

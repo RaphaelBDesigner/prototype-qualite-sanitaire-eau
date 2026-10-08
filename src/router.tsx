@@ -4,6 +4,7 @@ import { Accueil } from "./pages/Accueil";
 import { EnConstruction } from "./pages/EnConstruction";
 import { Carte } from "./pages/Carte";
 import { ChoixSecteur } from "./pages/ChoixSecteur";
+import { FicheSecteur } from "./pages/FicheSecteur";
 import { PageIntrouvable } from "./pages/PageIntrouvable";
 
 export const router = createBrowserRouter(
@@ -14,7 +15,7 @@ export const router = createBrowserRouter(
         { index: true, element: <Accueil /> },
         { path: "carte", element: <Carte /> },
         { path: "commune/:code", element: <ChoixSecteur /> },
-        { path: "secteur/:id", element: <EnConstruction titre="Fiche du secteur" /> },
+        { path: "secteur/:id", element: <FicheSecteur /> },
         { path: "article/:slug", element: <EnConstruction titre="Article" /> },
         { path: "faq", element: <EnConstruction titre="Questions fréquentes" /> },
         { path: "accessibilite", element: <EnConstruction titre="Accessibilité" /> },
