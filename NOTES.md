@@ -82,6 +82,21 @@
 - **Mode Baignade sur la carte** : carte seule et alerte DSFR « Bientôt disponible » dans le panneau (décision validée).
 - **Desktop** (pas de maquette) : panneau à gauche (environ un tiers), carte à droite (décision validée).
 
+## Écarts avec les maquettes — Fiche du secteur et volets
+
+- **Données** : résultats d'analyses fictifs (`src/lib/analyses.ts`). Pesticides (Chlorothalonil, dépassement le 09/07/2026) et Dureté (22,4 °f) reprennent les valeurs des maquettes ; les autres paramètres sont générés de façon déterministe par UDI. Coordonnées des mairies, captages et exploitants fictifs (`src/data/communes-infos.json`).
+- **Détail des analyses** : la maquette est illisible (125 px de large). Liste, groupes (paramètres sanitaires, références de qualité, caractéristiques, radioactivité) et familles de filtres reconstitués à partir de la description des interactions ; 56 paramètres au lieu de 80.
+- **État d'usage** : `Highlight` DSFR ; la bordure gauche prend la couleur de l'état (erreur, avertissement, information), ce que le DSFR ne propose pas en variante. Classes `etat-usage--*`.
+- **Note A à D, étapes numérotées « Votre secteur », graphique d'évolution** : pas d'équivalent DSFR, composants custom aux couleurs DSFR. Le graphique a une alternative accessible (onglet Tableau) et une description textuelle.
+- **Blocs des volets** (indicateurs, bilans) : cadre à filet gris (`bloc-indicateur`) ; la `Card` DSFR n'accepte pas de contenu interactif (accordéon, graphique).
+- **Tableau des prélèvements** : tableau DSFR, ligne du prélèvement affiché en style « ligne sélectionnée » natif (`aria-selected`) ; la date est un bouton (clavier), la ligne entière est cliquable. Les dépassements sont signalés par un pictogramme dans la colonne Valeur (pas de colonne Résultat, trop large sur mobile).
+- **Précédent / Suivant** : largeur naturelle des boutons (l'option « largeur égale » du DSFR les faisait passer sur deux lignes sur mobile).
+- **Volets empilés** : une seule modale DSFR. Depuis Analyses, ouvrir un paramètre l'empile ; « Fermer », Échap et clic sur le fond reviennent à Analyses (événements interceptés avant le JS DSFR), le focus revient sur la ligne du paramètre. À la fermeture complète, le focus revient sur le bouton de la page réellement utilisé (le DSFR le rendait au premier bouton lié à la modale).
+- **Contact & liens utiles** : `Tile` DSFR horizontales sans bordure ; le DSFR conserve la barre bleue en bas des tuiles et place l'icône en bas à droite (la maquette montre un filet gris et l'icône au centre).
+- **« Télécharger le bilan »** : PDF fictif (`public/documents/bilan-2025.pdf`).
+- **« Vérifier mon raccordement »** : alerte DSFR « bientôt disponible », fermable (décision validée).
+- **Recherche de paramètre** : champ DSFR avec icône loupe intégrée, sans bouton (le filtrage est instantané).
+
 ## Maquettes à compléter
 
 - `accueil-mobile.webp` (169 px de large) et `modale-detail-analyses.webp` (125 px de large) sont illisibles : versions en taille réelle attendues.
