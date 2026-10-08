@@ -6,14 +6,49 @@
 |---|---|---|
 | Suggestions de recherche (autocomplétion) | Bloc « Rechercher un lieu » | Pas de composant d'autocomplétion dans le DSFR 1.15. Liste custom selon le modèle ARIA combobox (flèches, Entrée, Échap, nombre de résultats annoncé), sous le champ `Input` DSFR, styles uniquement avec les tokens DSFR. |
 | Icône « Baignade » (nageur) | Bascule Eau potable / Baignade | Aucune icône de nage dans DSFR / Remix. **Exception validée** : on garde `public/icons/pool.svg`. |
-| Panneau glissant (bottom sheet) de l'écran carte | Écran carte | Pas d'équivalent DSFR. Détails à venir avec les interactions des autres pages. |
+| Panneau glissant (bottom sheet) de l'écran carte | Écran carte, choix du secteur | Pas d'équivalent DSFR. Composant custom (poignée, contenu défilant), styles avec les tokens DSFR. |
 | Légende hachurée « Zone = secteur de distribution » | Carte | Symbole cartographique, SVG simple aux couleurs DSFR. |
+| Volet latéral sur desktop | Tous les volets (Mairie, Origine, Analyses, Paramètre, Calcaire) | Pas de volet latéral dans le DSFR. **Exception validée** : modale DSFR (`createModal` : focus piégé, Échap, clic sur le fond, ARIA) avec une surcharge CSS minimale pour l'ancrer à droite sur desktop et l'animer (depuis le bas sur mobile, depuis la droite sur desktop). |
+| Note A B C D | Fiche UDI, Analyses, Paramètre | Pas d'équivalent DSFR. Composant custom, couleurs DSFR. |
+| Repères numérotés 1 à 4 | Fiche UDI, « Votre secteur » | Pas d'équivalent DSFR. Liste ordonnée custom, couleurs DSFR. |
+| Graphique d'évolution | Volet Paramètre | DSFR Chart ne gère a priori ni le seuil en pointillés ni la ligne verticale du prélèvement affiché (à confirmer à l'installation). Graphique SVG custom, couleurs DSFR. Le tableau sert d'alternative accessible. |
 
 ## Décisions validées
 
-- **Recherche** : vrai filtre par préfixe sur les communes (« Li » → Lille, Lisieux, Limoges…).
+### Accueil
+- **Logo** : `Header` avec `homeLinkProps` vers `/`.
+- **Recherche** : vrai filtre par préfixe sur les communes (« Li » → Lille, Lisieux, Limoges…). Seules les communes présentes dans les données fictives mènent à une fiche ; les autres affichent « Données non disponibles dans ce prototype ».
 - **Mode Baignade** : les suggestions portent sur des lieux de baignade, mais le parcours qui suit n'est pas fonctionnel en baignade.
-- **FAQ** : accordéons groupés (`fr-accordions-group`), fermés par défaut. Ouvrir une question referme la précédente (comportement DSFR natif).
+- **Bascule Eau potable / Baignade** : `SegmentedControl` ; change le libellé, le texte d'aide et le texte d'exemple du champ.
 - **« Explorer sur la carte »** : le type d'eau est transmis dans l'URL (`/carte?type=potable|baignade`).
-- **« Calcaire et dureté »** : modale DSFR (`createModal`), ancrée en bas de l'écran sur mobile.
+- **Cartes articles** : `Card` avec `enlargeLink` (survol DSFR natif).
+- **FAQ** : accordéons groupés (`fr-accordions-group`), fermés par défaut. Ouvrir une question referme la précédente (comportement DSFR natif).
+- **« Calcaire et dureté »** : volet (modale DSFR), bloc « Bon à savoir » en `CallOut`.
+- **Carte IGN** : déplacement, double-clic, pincement et clavier natifs Leaflet ; boutons +/– en `Button` tertiaires DSFR (contrôle de zoom Leaflet désactivé).
+
+### Choix du secteur (commune à plusieurs UDI)
+- Clic sur une zone de la carte ou sur une `Card` de secteur → fiche du secteur.
+- **« Retour » et flèche ← sur la carte** : ramènent à la page d'où l'on vient (historique de navigation).
+
+### Fiche UDI
+- État (interdiction, restriction, aucune) selon le secteur : `Highlight` + `Badge`, données fictives par UDI.
+- **« Changer d'adresse »** : ramène au choix du secteur.
+- **« Suivre les infos locales » et « Votre mairie »** : ouvrent le volet Mairie (`button` en `fr-link`, `Tile` avec `buttonProps`).
+- **« Vérifier mon raccordement »** : `Alert` info petite, fermable, « bientôt disponible ».
+- **FAQ** : accordéons DSFR.
+
+### Volets
+- Fermeture par « Fermer », Échap ou clic sur le fond.
+- **Navigation entre volets** : une seule modale dont le contenu suit une pile. Depuis Analyses, ouvrir un paramètre puis le fermer (bouton, Échap ou clic sur le fond) revient à Analyses ; le focus revient sur la ligne cliquée.
+- **Mairie** : téléphone (`tel:`) et e-mail (`mailto:`) cliquables ; site de la mairie dans un nouvel onglet, avec titre « … – nouvelle fenêtre ».
+- **Analyses** : recherche en direct (`Input`), filtres État (exclusifs entre eux) et Famille (plusieurs possibles) en `Tag` sélectionnables, cumulables ; compteur de résultats annoncé (`role="status"`) ; chaque ligne ouvre le paramètre.
+- **Paramètre** : « Évolution sur 12 mois » en `Accordion` ; Graphique / Tableau en `SegmentedControl` comme la maquette ; Précédent / Suivant déplacent le prélèvement affiché et mettent à jour la conclusion sanitaire (`CallOut`) ; sélection d'une ligne du tableau DSFR (bouton radio + style `aria-selected` natif).
+- **Dureté** : la ligne de l'échelle correspondant à la valeur mesurée est mise en évidence (style de ligne sélectionnée du tableau DSFR).
+
+## Assets
+
 - **Visuels 16:9** : convertis en WebP (`public/images/Visuel_16_9_{1,2,3,4}.webp`, 30 à 70 Ko chacun au lieu de 5 à 6 Mo), recadrés comme dans l'export Figma. Ordre des cartes de l'accueil : 1 « Qui s'occupe de mon eau ? », 2 « Quels contrôles pour l'eau potable ? », 3 « Qu'est-ce que le classement des eaux de baignade ? », 4 « Quels contrôles pour l'eau de baignade ? ».
+
+## Maquettes à compléter
+
+- `accueil-mobile.webp` (169 px de large) et `modale-detail-analyses.webp` (125 px de large) sont illisibles : versions en taille réelle attendues.
