@@ -85,7 +85,14 @@
 ## Écarts avec les maquettes — Fiche du secteur et volets
 
 - **Données** : résultats d'analyses fictifs (`src/lib/analyses.ts`). Pesticides (Chlorothalonil, dépassement le 09/07/2026) et Dureté (22,4 °f) reprennent les valeurs des maquettes ; les autres paramètres sont générés de façon déterministe par UDI. Coordonnées des mairies, captages et exploitants fictifs (`src/data/communes-infos.json`).
-- **Détail des analyses** : la maquette est illisible (125 px de large). Liste, groupes (paramètres sanitaires, références de qualité, caractéristiques, radioactivité) et familles de filtres reconstitués à partir de la description des interactions ; 56 paramètres au lieu de 80.
+- **Détail des analyses** : aligné sur la maquette lisible `maquettes/modale-detail-analyses.pdf` (5 groupes, filtres « État » et « Paramètres », liste des paramètres). Décisions validées sur ses incohérences :
+  - « Tous (n) » affiche le nombre total de paramètres (69), et non 15 ;
+  - « Épichlorhydrine », présent deux fois, n'apparaît qu'une fois ;
+  - « Radon » n'est rangé que dans « Radioactivité » : c'est un paramètre radiologique (valeur de référence 100 Bq/L), absent de la liste de vigilance européenne (décision d'exécution (UE) 2022/679 : 17-bêta-estradiol et nonylphénol) ;
+  - Pesticides : 256 substances recherchées partout (liste fixée par chaque ARS, de l'ordre de 300 molécules selon les régions, ex. 330 en Normandie) ;
+  - filtres sans paramètre homonyme : « Goût » et « Odeur » retiennent « Saveur », « Couleur » retient « Couleur » et « Aspect », « Chlore » retient chlore libre, chlore total, chlorates et chlorites, « Dureté » retient aussi calcium, magnésium, TAC et équilibre calcocarbonique.
+- **Seuils** : « Limite réglementaire » pour les paramètres sanitaires, « Référence de qualité » pour les autres groupes, « Valeur indicative » pour les paramètres sous surveillance.
+- **Bilan 2025** : « 12 prélèvements » dans le volet Analyses, « 6 prélèvements » dans la fiche, comme sur les deux maquettes.
 - **État d'usage** : `Highlight` DSFR ; la bordure gauche prend la couleur de l'état (erreur, avertissement, information), ce que le DSFR ne propose pas en variante. Classes `etat-usage--*`.
 - **Note A à D, étapes numérotées « Votre secteur », graphique d'évolution** : pas d'équivalent DSFR, composants custom aux couleurs DSFR. Le graphique a une alternative accessible (onglet Tableau) et une description textuelle.
 - **Blocs des volets** (indicateurs, bilans) : cadre à filet gris (`bloc-indicateur`) ; la `Card` DSFR n'accepte pas de contenu interactif (accordéon, graphique).
@@ -95,8 +102,8 @@
 - **Contact & liens utiles** : `Tile` DSFR horizontales sans bordure ; le DSFR conserve la barre bleue en bas des tuiles et place l'icône en bas à droite (la maquette montre un filet gris et l'icône au centre).
 - **« Télécharger le bilan »** : PDF fictif (`public/documents/bilan-2025.pdf`).
 - **« Vérifier mon raccordement »** : alerte DSFR « bientôt disponible », fermable (décision validée).
-- **Recherche de paramètre** : champ DSFR avec icône loupe intégrée, sans bouton (le filtrage est instantané).
+- **Recherche de paramètre** : champ DSFR avec bouton loupe, comme la maquette ; le filtrage étant instantané, le bouton remet le focus dans le champ.
 
 ## Maquettes à compléter
 
-- `accueil-mobile.webp` (169 px de large) et `modale-detail-analyses.webp` (125 px de large) sont illisibles : versions en taille réelle attendues.
+- `accueil-mobile.webp` (169 px de large) est illisible : version en taille réelle attendue.
