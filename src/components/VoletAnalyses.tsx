@@ -1,0 +1,158 @@
+import { useId, useMemo, useState } from "react";
+import { Input } from "@codegouvfr/react-dsfr/Input";
+import { Tag } from "@codegouvfr/react-dsfr/Tag";
+import { Badge } from "@codegouvfr/react-dsfr/Badge";
+import { Tooltip } from "@codegouvfr/react-dsfr/Tooltip";
+import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
+import { fr } from "@codegouvfr/react-dsfr";
+import { NoteQualite } from "./NoteQualite";
+import { useVolets } from "../lib/contexteVolets";
+import { etatParametre, FAMILLES, GROUPES, parametresDeLUdi, type EtatParametre } from "../lib/analyses";
+import { normaliser } from "../lib/recherche";
+
+type FiltreEtat = "tous" | Exclude<EtatParametre, "conforme">;
+
+/** Volet « Détails des analyses » : recherche en direct, filtres État et Famille cumulables, liste des paramètres. */
+export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
+  const id = useId();
+  const { empiler } = useVolets();
+  const [recherche, setRecherche] = useState("");
+  const [filtreEtat, setFiltreEtat] = useState<FiltreEtat>("tous");
+  const [familles, setFamilles] = useState<string[]>([]);
+
+  const parametres = useMemo(
+    () => parametresDeLUdi(codeUdi).map((parametre) => ({ parametre, etat: etatParametre(parametre) })),
+    [codeUdi],
+  );
+  const nbParEtat = (etat: EtatParametre) => parametres.filter((p) => p.etat === etat).length;
+
+  const resultats = parametres.filter(
+    ({ parametre, etat }) =>
+      (recherche === "" || normaliser(parametre.nom).includes(normaliser(recherche))) &&
+      (filtreEtat === "tous" || etat === filtreEtat) &&
+      (familles.length === 0 || (parametre.famille !== undefined && familles.includes(parametre.famille))),
+  );
+
+  const basculerFamille = (famille: string) =>
+    setFamilles((f) => (f.includes(famille) ? f.filter((x) => x !== famille) : [...f, famille]));
+
+  return (
+    <>
+      <h2 className={fr.cx("fr-h6", "fr-mb-2w")}>Qualité globale de l’eau</h2>
+      <section className="bloc-indicateur fr-p-3w fr-mb-4w" aria-labelledby={`${id}-bilan`}>
+        <h3 id={`${id}-bilan`} className={fr.cx("fr-text--lg", "fr-text--bold", "fr-mb-0")}>
+          Bilan 2025
+        </h3>
+        <p className={`${fr.cx("fr-text--sm", "fr-mb-1w")} fr-text-mention--grey`}>Basé sur 6 prélèvements (janvier à décembre 2025)</p>
+        <NoteQualite note="A" libelle="Eau de bonne qualité" />
+        <p className={fr.cx("fr-text--sm")}>
+          L’eau distribuée a respecté les exigences de qualité sanitaire tout au long de l’année, sans dépassement de limite
+          réglementaire.
+        </p>
+        <ButtonsGroup
+          buttons={[
+            {
+              children: "Télécharger le bilan",
+              priority: "secondary",
+              iconId: "fr-icon-download-line",
+              linkProps: {
+                href: `${import.meta.env.BASE_URL}documents/bilan-2025.pdf`,
+                download: "bilan-qualite-eau-2025.pdf",
+                title: "Télécharger le bilan 2025 (PDF)",
+              },
+            },
+          ]}
+        />
+      </section>
+
+      <h2 className={fr.cx("fr-h6", "fr-mb-2w")}>Rechercher un paramètre</h2>
+      <Input
+        label="Nom du paramètre"
+        hideLabel
+        iconId="fr-icon-search-line"
+        nativeInputProps={{ type: "search", value: recherche, placeholder: "Recherche", onChange: (e) => setRecherche(e.target.value) }}
+      />
+
+      <p id={`${id}-etat`} className={fr.cx("fr-text--sm", "fr-mb-1w")}>
+        État
+      </p>
+      <ul className={fr.cx("fr-tags-group")} role="group" aria-labelledby={`${id}-etat`}>
+        {(
+          [
+            ["tous", "Tous"],
+            ["depassement", `Dépassement de limite (${nbParEtat("depassement")})`],
+            ["surveiller", `À surveiller (${nbParEtat("surveiller")})`],
+          ] as [FiltreEtat, string][]
+        ).map(([valeur, libelle]) => (
+          <li key={valeur}>
+            <Tag small pressed={filtreEtat === valeur} nativeButtonProps={{ onClick: () => setFiltreEtat(valeur) }}>
+              {libelle}
+            </Tag>
+          </li>
+        ))}
+      </ul>
+
+      <p id={`${id}-famille`} className={fr.cx("fr-text--sm", "fr-mb-1w")}>
+        Famille
+      </p>
+      <ul className={fr.cx("fr-tags-group")} role="group" aria-labelledby={`${id}-famille`}>
+        {FAMILLES.map((famille) => (
+          <li key={famille}>
+            <Tag small pressed={familles.includes(famille)} nativeButtonProps={{ onClick: () => basculerFamille(famille) }}>
+              {famille}
+            </Tag>
+          </li>
+        ))}
+      </ul>
+
+      <p className={fr.cx("fr-text--bold", "fr-mt-2w")} role="status">
+        {resultats.length} résultat{resultats.length > 1 ? "s" : ""}
+      </p>
+
+      {resultats.length === 0 && <p>Aucun paramètre ne correspond à votre recherche.</p>}
+
+      {GROUPES.map((groupe) => {
+        const lignes = resultats.filter(({ parametre }) => parametre.groupe === groupe.id);
+        if (lignes.length === 0) return null;
+        return (
+          <section key={groupe.id} className={fr.cx("fr-mb-3w")} aria-labelledby={`${id}-${groupe.id}`}>
+            <h3 id={`${id}-${groupe.id}`} className="titre-groupe-parametres fr-text--md fr-text--bold fr-mb-0 fr-py-1w fr-px-2w">
+              {groupe.titre} <Tooltip kind="hover" title={groupe.aide} />
+            </h3>
+            <ul className={fr.cx("fr-raw-list")}>
+              {lignes.map(({ parametre, etat }) => {
+                const idLigne = `parametre-${parametre.id}`;
+                return (
+                  <li key={parametre.id}>
+                    <button
+                      type="button"
+                      id={idLigne}
+                      className="ligne-parametre"
+                      onClick={() => empiler({ type: "parametre", id: parametre.id }, idLigne)}
+                    >
+                      <span>
+                        {parametre.nom}
+                        {parametre.nbSubstances && parametre.nbSubstances > 1 && !/\(/.test(parametre.nom) && (
+                          <span className="fr-text-mention--grey"> ({parametre.nbSubstances} paramètres)</span>
+                        )}
+                        {etat !== "conforme" && (
+                          <>
+                            <br />
+                            <Badge small severity={etat === "depassement" ? "error" : "warning"} noIcon as="span">
+                              {etat === "depassement" ? "Dépassement de limite" : "À surveiller"}
+                            </Badge>
+                          </>
+                        )}
+                      </span>
+                      <span className={fr.cx("fr-icon-arrow-right-line")} aria-hidden="true" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        );
+      })}
+    </>
+  );
+}
