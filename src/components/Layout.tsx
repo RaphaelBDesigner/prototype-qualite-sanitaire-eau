@@ -16,7 +16,7 @@ const brandTop = (
   </>
 );
 
-const homeLinkProps = { to: "/", title: "Accueil - Qualité de l'eau" };
+const homeLinkProps = { to: "/", title: "Accueil - Qualité sanitaire des eaux" };
 
 export function Layout() {
   return (
@@ -30,7 +30,7 @@ export function Layout() {
       <Header
         brandTop={brandTop}
         homeLinkProps={homeLinkProps}
-        serviceTitle="Qualité de l'eau"
+        serviceTitle="Qualité sanitaire des eaux"
         serviceTagline="Suivez la qualité de l'eau en France"
         quickAccessItems={[headerFooterDisplayItem]}
       />
