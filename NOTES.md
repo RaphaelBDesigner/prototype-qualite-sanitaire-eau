@@ -61,6 +61,8 @@
 - **Liens du footer** : le composant DSFR affiche le nom de domaine (`eaufrance.fr`, `vigieau.gouv.fr`) et non « EauFrance », « VigiEau ». L'ordre des liens du bas est celui du composant (Plan du site, Accessibilité, Mentions légales, puis les autres).
 - **Contrôle segmenté Eau potable / Baignade** : sur toute la largeur du bloc, deux options 50/50 (demande validée). **Exception** à la règle « pas de CSS custom sur les composants DSFR » : classe `segmented-pleine-largeur` dans `styles/app.css`.
 - **Lien « Calcaire et dureté »** : c'est un `button` (il ouvre un volet) ; il reprend le soulignement DSFR des liens via la classe `lien-bouton`, qui réutilise les variables `--underline-*` du DSFR.
+- **Liens dans les accordéons de la FAQ** : le contenu est bien dans le conteneur natif `fr-collapse`, mais le DSFR 1.14 n'applique son retrait qu'à partir de la tablette (≥ 48em). Sur mobile, les liens sont alignés sur le titre avec les utilitaires DSFR `fr-px-2w fr-px-md-0` (pas de CSS custom). Sur desktop, le retrait natif du DSFR place les liens 4 px avant le texte du titre.
+- **Fonds de section** : intro et « Mieux comprendre la qualité de l'eau » en `fr-background-alt--blue-france`, FAQ sur fond blanc. Les utilitaires de couleur DSFR sont importés dans `main.tsx` (non inclus dans `main.css` de react-dsfr).
 - **Icône Eau potable** : `fr-icon-drop-line` (DSFR) à la place de `water_drop.svg`.
 - **Badges des cartes** : couleur `purple-glycine`, la plus proche du rose de la maquette.
 - **« Bon à savoir »** : `CallOut` en variante `blue-ecume`, la plus proche du fond bleu clair de la maquette.
