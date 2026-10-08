@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SegmentedControl } from "@codegouvfr/react-dsfr/SegmentedControl";
 import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
-import { fr, type FrIconClassName } from "@codegouvfr/react-dsfr";
-import { cx } from "@codegouvfr/react-dsfr/tools/cx";
+import { fr } from "@codegouvfr/react-dsfr";
+import { BasculeTypeEau } from "./BasculeTypeEau";
 import { ChampSuggestions } from "./ChampSuggestions";
 import {
   chercherCommunes,
@@ -26,9 +25,6 @@ const CHAMP_PAR_TYPE = {
   },
 } as const;
 
-/** Icône custom (pas d'équivalent DSFR, cf. NOTES.md), déclarée dans styles/app.css. */
-const ICONE_BAIGNADE = "fr-icon-pool-line" as FrIconClassName;
-
 export function RechercheLieu() {
   const navigate = useNavigate();
   const [typeEau, setTypeEau] = useState<TypeEau>("potable");
@@ -48,36 +44,13 @@ export function RechercheLieu() {
   return (
     <div className="bloc-recherche fr-p-3w">
       <h2 className={fr.cx("fr-h4")}>Rechercher un lieu</h2>
-      <SegmentedControl
-        legend="Type d’eau"
-        name="type-eau"
-        className={cx(fr.cx("fr-mb-3w"), "segmented-pleine-largeur")}
-        segments={[
-          {
-            label: "Eau potable",
-            iconId: "fr-icon-drop-line",
-            nativeInputProps: {
-              value: "potable",
-              checked: typeEau === "potable",
-              onChange: () => {
-                setTypeEau("potable");
-                setMessage(undefined);
-              },
-            },
-          },
-          {
-            label: "Baignade",
-            iconId: ICONE_BAIGNADE,
-            nativeInputProps: {
-              value: "baignade",
-              checked: typeEau === "baignade",
-              onChange: () => {
-                setTypeEau("baignade");
-                setMessage(undefined);
-              },
-            },
-          },
-        ]}
+      <BasculeTypeEau
+        valeur={typeEau}
+        onChange={(type) => {
+          setTypeEau(type);
+          setMessage(undefined);
+        }}
+        className={fr.cx("fr-mb-3w")}
       />
       <ChampSuggestions
         // Nouveau champ (saisie vidée) à chaque changement de type d'eau.

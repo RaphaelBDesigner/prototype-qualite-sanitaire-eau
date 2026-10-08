@@ -6,6 +6,8 @@ import { normaliser, type Suggestion } from "../lib/recherche";
 
 type Props = {
   label: ReactNode;
+  /** Libellé lu par les lecteurs d’écran mais masqué à l’écran (barre de recherche). */
+  masquerLibelle?: boolean;
   placeholder: string;
   chercher: (saisie: string) => Promise<Suggestion[]>;
   onSelection: (suggestion: Suggestion) => void;
@@ -19,7 +21,7 @@ type Props = {
  * Le DSFR n'ayant pas de composant d'autocomplétion, la liste suit le modèle ARIA « combobox »
  * (https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) : flèches, Entrée, Échap.
  */
-export function ChampSuggestions({ label, placeholder, chercher, onSelection, message, onSaisie }: Props) {
+export function ChampSuggestions({ label, masquerLibelle, placeholder, chercher, onSelection, message, onSaisie }: Props) {
   const id = useId();
   const idListe = `${id}-suggestions`;
   const [saisie, setSaisie] = useState("");
@@ -108,6 +110,7 @@ export function ChampSuggestions({ label, placeholder, chercher, onSelection, me
     <form role="search" onSubmit={onSubmit} className="champ-suggestions">
       <Input
         label={label}
+        hideLabel={masquerLibelle}
         state={etat?.etat ?? "default"}
         stateRelatedMessage={etat?.texte}
         nativeInputProps={{
