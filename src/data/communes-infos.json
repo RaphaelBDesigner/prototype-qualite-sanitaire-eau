@@ -1,0 +1,54 @@
+{
+  "_source": "Informations fictives pour le prototype (coordonnées des mairies, exploitants, captages, population desservie).",
+  "59350": {
+    "mairie": {
+      "telephone": "03 20 15 97 40",
+      "email": "lillecentre@mairie-lille.fr",
+      "adresse": "10, rue Pierre Dupont, 59000 Lille",
+      "horaires": "Du lundi au vendredi : 9h – 12h30 et 13h15 – 17h",
+      "fermeture": "Fermée le samedi et le 1er mardi du mois",
+      "site": { "libelle": "Site de la mairie de Lille", "url": "https://www.lille.fr" }
+    },
+    "captage": "Emmerin",
+    "traitement": { "nom": "Physico-chimique + désinfection", "description": "Un traitement physico-chimique est appliqué pour éliminer les particules et matières organiques courantes de l’eau brute, en complément de la désinfection." },
+    "exploitant": "Métropole Européenne de Lille",
+    "gestionnaire": { "nom": "iléo", "url": "https://www.ileo.fr" },
+    "habitantsParSecteur": 95000,
+    "ars": { "nom": "ARS Hauts-de-France", "url": "https://www.hauts-de-france.ars.sante.fr" },
+    "distributeur": "https://www.ileo.fr"
+  },
+  "33063": {
+    "mairie": {
+      "telephone": "05 56 10 20 30",
+      "email": "contact@mairie-bordeaux.fr",
+      "adresse": "Place Pey-Berland, 33000 Bordeaux",
+      "horaires": "Du lundi au vendredi : 8h30 – 17h",
+      "fermeture": "Fermée le samedi et le dimanche",
+      "site": { "libelle": "Site de la mairie de Bordeaux", "url": "https://www.bordeaux.fr" }
+    },
+    "captage": "Forages de la nappe de l’Éocène",
+    "traitement": { "nom": "Désinfection", "description": "L’eau souterraine, naturellement protégée, est désinfectée avant sa distribution." },
+    "exploitant": "Bordeaux Métropole",
+    "gestionnaire": { "nom": "Eau Bordeaux Métropole", "url": "https://www.eau-bordeaux-metropole.fr" },
+    "habitantsParSecteur": 60000,
+    "ars": { "nom": "ARS Nouvelle-Aquitaine", "url": "https://www.nouvelle-aquitaine.ars.sante.fr" },
+    "distributeur": "https://www.eau-bordeaux-metropole.fr"
+  },
+  "69123": {
+    "mairie": {
+      "telephone": "04 72 10 30 30",
+      "email": "contact@mairie-lyon.fr",
+      "adresse": "1, place de la Comédie, 69001 Lyon",
+      "horaires": "Du lundi au vendredi : 8h45 – 16h45",
+      "fermeture": "Fermée le samedi et le dimanche",
+      "site": { "libelle": "Site de la mairie de Lyon", "url": "https://www.lyon.fr" }
+    },
+    "captage": "Champ captant de Crépieux-Charmy",
+    "traitement": { "nom": "Désinfection", "description": "L’eau de la nappe alluviale du Rhône est désinfectée avant sa distribution." },
+    "exploitant": "Métropole de Lyon",
+    "gestionnaire": { "nom": "Eau du Grand Lyon", "url": "https://www.eaudugrandlyon.fr" },
+    "habitantsParSecteur": 40000,
+    "ars": { "nom": "ARS Auvergne-Rhône-Alpes", "url": "https://www.auvergne-rhone-alpes.ars.sante.fr" },
+    "distributeur": "https://www.eaudugrandlyon.fr"
+  }
+}

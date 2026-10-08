@@ -77,3 +77,12 @@ function contientPoint(anneau: Position[], x: number, y: number) {
   }
   return dedans;
 }
+
+/** Un secteur et sa commune de rattachement, à partir du code UDI. */
+export function secteurParCode(code: string) {
+  const secteur = SECTEURS[code];
+  const entree = Object.entries(COMMUNES).find(([, { udi: codes }]) => codes.includes(code));
+  if (!secteur || !entree) return undefined;
+  const [codeCommune, { nom: commune }] = entree;
+  return { secteur, codeCommune, commune };
+}
