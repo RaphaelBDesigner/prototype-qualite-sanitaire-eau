@@ -57,9 +57,10 @@
 
 ## Écarts avec les maquettes — Accueil
 
-- **Intitulé du service** : les maquettes varient (« Qualité sanitaire des eaux », « Contrôle sanitaire des eaux », « Qualité de l'eau »). Retenu : « Qualité de l'eau » / « Suivez la qualité de l'eau en France », cohérent avec le texte du footer. À confirmer.
+- **Intitulé du service** : « Qualité sanitaire des eaux » (validé), avec l'accroche « Suivez la qualité de l'eau en France ». Le texte du footer garde « Qualité de l'eau est le service public… ».
 - **Liens du footer** : le composant DSFR affiche le nom de domaine (`eaufrance.fr`, `vigieau.gouv.fr`) et non « EauFrance », « VigiEau ». L'ordre des liens du bas est celui du composant (Plan du site, Accessibilité, Mentions légales, puis les autres).
-- **Contrôle segmenté** : les deux options ne s'étirent pas sur toute la largeur du bloc, comportement natif du DSFR.
+- **Contrôle segmenté Eau potable / Baignade** : sur toute la largeur du bloc, deux options 50/50 (demande validée). **Exception** à la règle « pas de CSS custom sur les composants DSFR » : classe `segmented-pleine-largeur` dans `styles/app.css`.
+- **Lien « Calcaire et dureté »** : c'est un `button` (il ouvre un volet) ; il reprend le soulignement DSFR des liens via la classe `lien-bouton`, qui réutilise les variables `--underline-*` du DSFR.
 - **Icône Eau potable** : `fr-icon-drop-line` (DSFR) à la place de `water_drop.svg`.
 - **Badges des cartes** : couleur `purple-glycine`, la plus proche du rose de la maquette.
 - **« Bon à savoir »** : `CallOut` en variante `blue-ecume`, la plus proche du fond bleu clair de la maquette.
