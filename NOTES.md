@@ -16,4 +16,4 @@
 - **FAQ** : accordéons groupés (`fr-accordions-group`), fermés par défaut. Ouvrir une question referme la précédente (comportement DSFR natif).
 - **« Explorer sur la carte »** : le type d'eau est transmis dans l'URL (`/carte?type=potable|baignade`).
 - **« Calcaire et dureté »** : modale DSFR (`createModal`), ancrée en bas de l'écran sur mobile.
-- **Visuels 16:9** : convertis en WebP (`public/images/Visuel_16_9_{1,2,3,4}.webp`, 30 à 60 Ko chacun au lieu de 5 à 6 Mo), recadrés comme dans l'export Figma. Ordre des cartes de l'accueil : 1 « Qui s'occupe de mon eau ? », 2 « Quels contrôles pour l'eau potable ? », 3 « Qu'est-ce que le classement des eaux de baignade ? », 4 « Quels contrôles pour l'eau de baignade ? ».
+- **Visuels 16:9** : convertis en WebP (`public/images/Visuel_16_9_{1,2,3,4}.webp`, 30 à 70 Ko chacun au lieu de 5 à 6 Mo), recadrés comme dans l'export Figma. Ordre des cartes de l'accueil : 1 « Qui s'occupe de mon eau ? », 2 « Quels contrôles pour l'eau potable ? », 3 « Qu'est-ce que le classement des eaux de baignade ? », 4 « Quels contrôles pour l'eau de baignade ? ».
