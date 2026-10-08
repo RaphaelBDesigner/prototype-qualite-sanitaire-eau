@@ -6,11 +6,11 @@ import type { EtatParametre } from "../lib/analyses";
  * Statut d'un paramètre selon le nombre de dépassements sur la période affichée :
  * 0 → Conforme (info), 1 → À surveiller (jaune tournesol, sans icône), 2 ou plus → Dépassement de limite (warning).
  */
-export function BadgeEtat({ etat, className }: { etat: EtatParametre; className?: string }) {
+export function BadgeEtat({ etat, className, sansIcone }: { etat: EtatParametre; className?: string; sansIcone?: boolean }) {
   switch (etat) {
     case "conforme":
       return (
-        <Badge small severity="info" as="span" className={className}>
+        <Badge small severity="info" noIcon={sansIcone} as="span" className={className}>
           Conforme
         </Badge>
       );
@@ -22,7 +22,7 @@ export function BadgeEtat({ etat, className }: { etat: EtatParametre; className?
       );
     default:
       return (
-        <Badge small severity="warning" as="span" className={className}>
+        <Badge small severity="warning" noIcon={sansIcone} as="span" className={className}>
           Dépassement de limite
         </Badge>
       );

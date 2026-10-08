@@ -149,8 +149,13 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
                         {parametre.nbSubstances && parametre.nbSubstances > 1 && (
                           <span className="fr-text-mention--grey"> ({parametre.nbSubstances} paramètres)</span>
                         )}
-                        <br />
-                        <BadgeEtat etat={etat} />
+                        {/* Dans la liste, seuls les paramètres à surveiller ou en dépassement ont un badge, sans icône. */}
+                        {etat !== "conforme" && (
+                          <>
+                            <br />
+                            <BadgeEtat etat={etat} sansIcone />
+                          </>
+                        )}
                       </span>
                       <span className={fr.cx("fr-icon-arrow-right-line")} aria-hidden="true" />
                     </button>
