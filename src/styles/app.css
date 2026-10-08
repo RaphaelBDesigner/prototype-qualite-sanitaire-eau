@@ -14,6 +14,36 @@
   box-shadow: var(--raised-shadow);
 }
 
+/* Bascule Eau potable / Baignade sur toute la largeur, deux options 50/50
+ * (demande explicite, exception à la règle « pas de CSS sur les composants DSFR », cf. NOTES.md). */
+.segmented-pleine-largeur,
+.segmented-pleine-largeur .fr-segmented__elements {
+  display: flex;
+  width: 100%;
+}
+
+.segmented-pleine-largeur .fr-segmented__element {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.segmented-pleine-largeur input + label {
+  justify-content: center;
+}
+
+/* Bouton présenté comme un lien (il ouvre un volet, donc ce n'est pas un <a>) :
+ * reprend le soulignement que le DSFR applique aux éléments [href]. */
+.lien-bouton {
+  background-image: var(--underline-img), var(--underline-img);
+  background-position: var(--underline-x) 100%, var(--underline-x) calc(100% - var(--underline-thickness));
+  background-repeat: no-repeat, no-repeat;
+  background-size: var(--underline-hover-width) calc(var(--underline-thickness) * 2), var(--underline-idle-width) var(--underline-thickness);
+}
+
+.lien-bouton:hover {
+  --underline-hover-width: var(--underline-max-width);
+}
+
 /* ---------- Icône Baignade (exception validée, cf. NOTES.md) ----------
  * Les règles génériques du DSFR s'appliquent à toute classe « fr-icon-* » :
  * il suffit de fournir le masque. */

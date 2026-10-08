@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SegmentedControl } from "@codegouvfr/react-dsfr/SegmentedControl";
 import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
 import { fr, type FrIconClassName } from "@codegouvfr/react-dsfr";
+import { cx } from "@codegouvfr/react-dsfr/tools/cx";
 import { ChampSuggestions } from "./ChampSuggestions";
 import {
   chercherCommunes,
@@ -50,7 +51,7 @@ export function RechercheLieu() {
       <SegmentedControl
         legend="Type d’eau"
         name="type-eau"
-        className={fr.cx("fr-mb-3w")}
+        className={cx(fr.cx("fr-mb-3w"), "segmented-pleine-largeur")}
         segments={[
           {
             label: "Eau potable",

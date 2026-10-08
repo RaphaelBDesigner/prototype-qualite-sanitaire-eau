@@ -1,5 +1,6 @@
 import { Accordion } from "@codegouvfr/react-dsfr/Accordion";
 import { fr } from "@codegouvfr/react-dsfr";
+import { cx } from "@codegouvfr/react-dsfr/tools/cx";
 import { Link } from "react-router-dom";
 import { voletCalcaire } from "./volets";
 
@@ -23,7 +24,7 @@ export function FaqAccueil() {
         <Accordion label="Eau potable : les sujets qui intéressent" titleAs="h3">
           <ul className={fr.cx("fr-raw-list")}>
             <li className={fr.cx("fr-mb-2w")}>
-              <button type="button" className={CLASSES_LIEN} {...voletCalcaire.buttonProps}>
+              <button type="button" className={cx(CLASSES_LIEN, "lien-bouton")} {...voletCalcaire.buttonProps}>
                 Calcaire et dureté
               </button>
             </li>
