@@ -10,7 +10,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generer:communes": "node scripts/generer-communes.mjs"
+    "generer:communes": "node scripts/generer-communes.mjs",
+    "corriger:udi": "node scripts/corriger-udi.mjs"
   },
   "dependencies": {
     "@codegouvfr/react-dsfr": "^1.35.0",
