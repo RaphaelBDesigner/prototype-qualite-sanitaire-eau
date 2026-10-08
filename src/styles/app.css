@@ -523,8 +523,16 @@
 }
 
 /* Liste des paramètres du volet Analyses. */
-.titre-groupe-parametres {
-  background-color: var(--background-alt-blue-france);
+.groupe-parametres {
+  border: 1px solid var(--border-default-grey);
+}
+
+.groupe-parametres__titre {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--background-alt-grey);
+  border-bottom: 1px solid var(--border-default-grey);
 }
 
 .ligne-parametre {
@@ -535,8 +543,11 @@
   width: 100%;
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid var(--border-default-grey);
   color: var(--text-default-grey);
+}
+
+.groupe-parametres li + li .ligne-parametre {
+  border-top: 1px solid var(--border-default-grey);
 }
 
 .ligne-parametre > [class*="fr-icon-"] {

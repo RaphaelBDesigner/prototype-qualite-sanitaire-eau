@@ -1,5 +1,6 @@
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { Input } from "@codegouvfr/react-dsfr/Input";
+import { Button } from "@codegouvfr/react-dsfr/Button";
 import { Tag } from "@codegouvfr/react-dsfr/Tag";
 import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import { Tooltip } from "@codegouvfr/react-dsfr/Tooltip";
@@ -7,18 +8,19 @@ import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
 import { fr } from "@codegouvfr/react-dsfr";
 import { NoteQualite } from "./NoteQualite";
 import { useVolets } from "../lib/contexteVolets";
-import { etatParametre, FAMILLES, GROUPES, parametresDeLUdi, type EtatParametre } from "../lib/analyses";
+import { etatParametre, FILTRES, GROUPES, parametresDeLUdi, type EtatParametre, type Filtre } from "../lib/analyses";
 import { normaliser } from "../lib/recherche";
 
 type FiltreEtat = "tous" | Exclude<EtatParametre, "conforme">;
 
-/** Volet « Détails des analyses » : recherche en direct, filtres État et Famille cumulables, liste des paramètres. */
+/** Volet « Détails des analyses » : recherche en direct, filtres État et Paramètres cumulables, liste des paramètres. */
 export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
   const id = useId();
   const { empiler } = useVolets();
+  const champ = useRef<HTMLInputElement>(null);
   const [recherche, setRecherche] = useState("");
   const [filtreEtat, setFiltreEtat] = useState<FiltreEtat>("tous");
-  const [familles, setFamilles] = useState<string[]>([]);
+  const [filtres, setFiltres] = useState<Filtre[]>([]);
 
   const parametres = useMemo(
     () => parametresDeLUdi(codeUdi).map((parametre) => ({ parametre, etat: etatParametre(parametre) })),
@@ -30,56 +32,64 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
     ({ parametre, etat }) =>
       (recherche === "" || normaliser(parametre.nom).includes(normaliser(recherche))) &&
       (filtreEtat === "tous" || etat === filtreEtat) &&
-      (familles.length === 0 || (parametre.famille !== undefined && familles.includes(parametre.famille))),
+      (filtres.length === 0 || filtres.some((filtre) => parametre.filtres?.includes(filtre))),
   );
 
-  const basculerFamille = (famille: string) =>
-    setFamilles((f) => (f.includes(famille) ? f.filter((x) => x !== famille) : [...f, famille]));
+  const basculerFiltre = (filtre: Filtre) =>
+    setFiltres((f) => (f.includes(filtre) ? f.filter((x) => x !== filtre) : [...f, filtre]));
 
   return (
     <>
       <h2 className={fr.cx("fr-h6", "fr-mb-2w")}>Qualité globale de l’eau</h2>
-      <section className="bloc-indicateur fr-p-3w fr-mb-4w" aria-labelledby={`${id}-bilan`}>
+      <section className="bloc-indicateur fr-p-3w fr-mb-2w" aria-labelledby={`${id}-bilan`}>
         <h3 id={`${id}-bilan`} className={fr.cx("fr-text--lg", "fr-text--bold", "fr-mb-0")}>
           Bilan 2025
         </h3>
-        <p className={`${fr.cx("fr-text--sm", "fr-mb-1w")} fr-text-mention--grey`}>Basé sur 6 prélèvements (janvier à décembre 2025)</p>
+        <p className={fr.cx("fr-text--sm", "fr-mb-2w")}>Basé sur 12 prélèvements (janv.-déc. 2025)</p>
         <NoteQualite note="A" libelle="Eau de bonne qualité" />
-        <p className={fr.cx("fr-text--sm")}>
-          L’eau distribuée a respecté les exigences de qualité sanitaire tout au long de l’année, sans dépassement de limite
-          réglementaire.
+        <p className={fr.cx("fr-text--sm", "fr-mb-0")}>
+          L’eau distribuée est de bonne qualité et respecte les exigences sanitaires. Elle peut être consommée et utilisée
+          normalement, sans restriction.
         </p>
-        <ButtonsGroup
-          buttons={[
-            {
-              children: "Télécharger le bilan",
-              priority: "secondary",
-              iconId: "fr-icon-download-line",
-              linkProps: {
-                href: `${import.meta.env.BASE_URL}documents/bilan-2025.pdf`,
-                download: "bilan-qualite-eau-2025.pdf",
-                title: "Télécharger le bilan 2025 (PDF)",
-              },
-            },
-          ]}
-        />
       </section>
+      <ButtonsGroup
+        buttons={[
+          {
+            children: "Télécharger un bilan",
+            priority: "secondary",
+            iconId: "fr-icon-download-line",
+            linkProps: {
+              href: `${import.meta.env.BASE_URL}documents/bilan-2025.pdf`,
+              download: "bilan-qualite-eau-2025.pdf",
+              title: "Télécharger le bilan 2025 (PDF)",
+            },
+          },
+        ]}
+      />
+      <hr className={fr.cx("fr-mt-1w", "fr-pb-3w")} />
 
       <h2 className={fr.cx("fr-h6", "fr-mb-2w")}>Rechercher un paramètre</h2>
       <Input
         label="Nom du paramètre"
         hideLabel
-        iconId="fr-icon-search-line"
-        nativeInputProps={{ type: "search", value: recherche, placeholder: "Recherche", onChange: (e) => setRecherche(e.target.value) }}
+        nativeInputProps={{
+          ref: champ,
+          type: "search",
+          value: recherche,
+          placeholder: "Recherche",
+          onChange: (e) => setRecherche(e.target.value),
+        }}
+        // Le filtrage est instantané : le bouton (présent sur la maquette) remet le focus dans le champ.
+        addon={<Button iconId="fr-icon-search-line" title="Rechercher" type="button" onClick={() => champ.current?.focus()} />}
       />
 
-      <p id={`${id}-etat`} className={fr.cx("fr-text--sm", "fr-mb-1w")}>
+      <p id={`${id}-etat`} className={`${fr.cx("fr-text--sm", "fr-mb-1w")} fr-text-mention--grey`}>
         État
       </p>
       <ul className={fr.cx("fr-tags-group")} role="group" aria-labelledby={`${id}-etat`}>
         {(
           [
-            ["tous", "Tous"],
+            ["tous", `Tous (${parametres.length})`],
             ["depassement", `Dépassement de limite (${nbParEtat("depassement")})`],
             ["surveiller", `À surveiller (${nbParEtat("surveiller")})`],
           ] as [FiltreEtat, string][]
@@ -91,21 +101,22 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
           </li>
         ))}
       </ul>
+      <hr className={fr.cx("fr-pb-2w")} />
 
-      <p id={`${id}-famille`} className={fr.cx("fr-text--sm", "fr-mb-1w")}>
-        Famille
+      <p id={`${id}-parametres`} className={`${fr.cx("fr-text--sm", "fr-mb-1w")} fr-text-mention--grey`}>
+        Paramètres
       </p>
-      <ul className={fr.cx("fr-tags-group")} role="group" aria-labelledby={`${id}-famille`}>
-        {FAMILLES.map((famille) => (
-          <li key={famille}>
-            <Tag small pressed={familles.includes(famille)} nativeButtonProps={{ onClick: () => basculerFamille(famille) }}>
-              {famille}
+      <ul className={fr.cx("fr-tags-group")} role="group" aria-labelledby={`${id}-parametres`}>
+        {FILTRES.map((filtre) => (
+          <li key={filtre}>
+            <Tag small pressed={filtres.includes(filtre)} nativeButtonProps={{ onClick: () => basculerFiltre(filtre) }}>
+              {filtre}
             </Tag>
           </li>
         ))}
       </ul>
 
-      <p className={fr.cx("fr-text--bold", "fr-mt-2w")} role="status">
+      <p className={fr.cx("fr-text--bold", "fr-mt-1w")} role="status">
         {resultats.length} résultat{resultats.length > 1 ? "s" : ""}
       </p>
 
@@ -115,10 +126,13 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
         const lignes = resultats.filter(({ parametre }) => parametre.groupe === groupe.id);
         if (lignes.length === 0) return null;
         return (
-          <section key={groupe.id} className={fr.cx("fr-mb-3w")} aria-labelledby={`${id}-${groupe.id}`}>
-            <h3 id={`${id}-${groupe.id}`} className="titre-groupe-parametres fr-text--md fr-text--bold fr-mb-0 fr-py-1w fr-px-2w">
-              {groupe.titre} <Tooltip kind="hover" title={groupe.aide} />
-            </h3>
+          <section key={groupe.id} className="groupe-parametres fr-mb-3w" aria-labelledby={`${id}-${groupe.id}`}>
+            <div className="groupe-parametres__titre fr-py-1w fr-px-2w">
+              <h3 id={`${id}-${groupe.id}`} className={fr.cx("fr-text--sm", "fr-text--bold", "fr-mb-0")}>
+                {groupe.titre}
+              </h3>
+              <Tooltip kind="hover" title={groupe.aide} />
+            </div>
             <ul className={fr.cx("fr-raw-list")}>
               {lignes.map(({ parametre, etat }) => {
                 const idLigne = `parametre-${parametre.id}`;
@@ -130,9 +144,9 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
                       className="ligne-parametre"
                       onClick={() => empiler({ type: "parametre", id: parametre.id }, idLigne)}
                     >
-                      <span>
+                      <span className={fr.cx("fr-text--sm", "fr-mb-0")}>
                         {parametre.nom}
-                        {parametre.nbSubstances && parametre.nbSubstances > 1 && !/\(/.test(parametre.nom) && (
+                        {parametre.nbSubstances && parametre.nbSubstances > 1 && (
                           <span className="fr-text-mention--grey"> ({parametre.nbSubstances} paramètres)</span>
                         )}
                         {etat !== "conforme" && (

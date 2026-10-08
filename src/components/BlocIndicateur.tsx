@@ -11,6 +11,8 @@ import { depasse, formaterDate, formaterValeur, type Indicateur, type Mesure } f
 import { conclusionPrelevement } from "../lib/conclusions";
 import type { StatutSecteur } from "../lib/secteurs";
 
+const LIBELLES_SEUIL = { limite: "Limite réglementaire", reference: "Référence de qualité", indicative: "Valeur indicative" };
+
 type Props = {
   indicateur: Indicateur;
   statut: StatutSecteur;
@@ -34,7 +36,7 @@ export function BlocIndicateur({ indicateur, statut, complement, titreAs: Titre 
         {indicateur.nom}
       </Titre>
       <p className={`${fr.cx("fr-text--sm", "fr-mb-2w")} fr-text-mention--grey`}>
-        {limite === undefined ? "Pas de limite réglementaire" : `Limite réglementaire : ≤ ${formaterValeur(limite)} ${unite}`}
+        {limite === undefined ? "Pas de limite réglementaire" : `${LIBELLES_SEUIL[indicateur.seuil ?? "limite"]} : ≤ ${formaterValeur(limite)} ${unite}`}
       </p>
       <p className={fr.cx("fr-text--lg", "fr-text--bold", "fr-mb-1w")}>
         {formaterValeur(derniere.valeur)} {unite}{" "}

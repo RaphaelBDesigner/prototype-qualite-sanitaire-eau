@@ -4,7 +4,11 @@
  * de façon déterministe à partir du code de l'UDI, pour que chaque secteur ait ses propres valeurs.
  */
 
-export type Groupe = "sanitaire" | "reference" | "caracteristique" | "radioactivite";
+export type Groupe = "sanitaire" | "reference" | "caracteristique" | "radioactivite" | "surveillance";
+
+/** Filtres « Paramètres » du volet Analyses (maquette). */
+export const FILTRES = ["Nitrates", "Pesticides", "PFAS", "Dureté", "Goût", "Odeur", "Couleur", "Chlore"] as const;
+export type Filtre = (typeof FILTRES)[number];
 
 export type EtatParametre = "depassement" | "surveiller" | "conforme";
 
@@ -14,8 +18,10 @@ export type Indicateur = {
   id: string;
   nom: string;
   unite: string;
-  /** Limite réglementaire (valeur maximale), absente pour les paramètres sans limite. */
+  /** Seuil (valeur maximale), absent pour les paramètres sans seuil. */
   limite?: number;
+  /** Nature du seuil : limite réglementaire (défaut), référence de qualité ou valeur indicative. */
+  seuil?: "limite" | "reference" | "indicative";
   description: string;
   mesures: Mesure[];
 };
@@ -24,7 +30,7 @@ export type Parametre = {
   id: string;
   nom: string;
   groupe: Groupe;
-  famille?: string;
+  filtres?: Filtre[];
   description: string;
   /** Une famille (ex. Pesticides) regroupe plusieurs substances suivies individuellement. */
   nbSubstances?: number;
@@ -59,6 +65,11 @@ export const GROUPES: { id: Groupe; titre: string; aide: string }[] = [
     aide: "Propriétés naturelles de l’eau (minéralisation, acidité, température…).",
   },
   { id: "radioactivite", titre: "Radioactivité", aide: "Indicateurs de radioactivité naturelle ou artificielle de l’eau." },
+  {
+    id: "surveillance",
+    titre: "Paramètres sous surveillance",
+    aide: "Substances émergentes suivies par précaution (liste de vigilance européenne), avec une valeur indicative et non une limite réglementaire.",
+  },
 ];
 
 /** Dates des prélèvements des 12 derniers mois (format ISO). */
@@ -81,7 +92,8 @@ function aleatoire(graine: string) {
 type Definition = {
   nom: string;
   groupe: Groupe;
-  famille?: string;
+  /** Filtres « Paramètres » du volet Analyses qui retiennent ce paramètre. */
+  filtres?: Filtre[];
   unite: string;
   limite?: number;
   /** Valeur typique, autour de laquelle les mesures sont générées. */
@@ -90,64 +102,80 @@ type Definition = {
   nbSubstances?: number;
 };
 
+// Liste et groupes repris de la maquette « Détails des analyses » (maquettes/modale-detail-analyses.pdf).
+// Limites, références de qualité et valeurs indicatives : ordres de grandeur réglementaires, valeurs mesurées fictives.
 const DEFINITIONS: Definition[] = [
-  { nom: "Nitrates", groupe: "sanitaire", famille: "Nitrates", unite: "mg/L", limite: 50, typique: 18, description: "Issus principalement des engrais agricoles et des rejets d’eaux usées." },
-  { nom: "Nitrites", groupe: "sanitaire", famille: "Nitrates", unite: "mg/L", limite: 0.5, typique: 0.02, description: "Forme intermédiaire de l’azote, surveillée en sortie de traitement." },
-  { nom: "PFAS (20 substances)", groupe: "sanitaire", famille: "PFAS", unite: "µg/L", limite: 0.1, typique: 0.03, description: "Somme de 20 substances perfluoroalkylées, persistantes dans l’environnement.", nbSubstances: 20 },
-  { nom: "Plomb", groupe: "sanitaire", famille: "Plomb", unite: "µg/L", limite: 10, typique: 1.5, description: "Provient surtout des anciennes canalisations en plomb." },
-  { nom: "Arsenic", groupe: "sanitaire", famille: "Métaux", unite: "µg/L", limite: 10, typique: 2, description: "Élément naturellement présent dans certains sols." },
-  { nom: "Cadmium", groupe: "sanitaire", famille: "Métaux", unite: "µg/L", limite: 5, typique: 0.2, description: "Métal pouvant provenir de rejets industriels." },
-  { nom: "Chrome", groupe: "sanitaire", famille: "Métaux", unite: "µg/L", limite: 25, typique: 1, description: "Métal d’origine naturelle ou industrielle." },
-  { nom: "Cuivre", groupe: "sanitaire", famille: "Métaux", unite: "mg/L", limite: 2, typique: 0.05, description: "Provient principalement des canalisations intérieures en cuivre." },
-  { nom: "Mercure", groupe: "sanitaire", famille: "Métaux", unite: "µg/L", limite: 1, typique: 0.05, description: "Métal toxique, rarement détecté dans l’eau du robinet." },
-  { nom: "Nickel", groupe: "sanitaire", famille: "Métaux", unite: "µg/L", limite: 20, typique: 2, description: "Peut provenir de la robinetterie." },
-  { nom: "Sélénium", groupe: "sanitaire", famille: "Métaux", unite: "µg/L", limite: 20, typique: 1, description: "Élément présent naturellement dans certaines nappes." },
-  { nom: "Antimoine", groupe: "sanitaire", famille: "Métaux", unite: "µg/L", limite: 10, typique: 0.5, description: "Peut provenir de certains matériaux au contact de l’eau." },
-  { nom: "Bore", groupe: "sanitaire", unite: "mg/L", limite: 1.5, typique: 0.05, description: "Élément d’origine naturelle ou issu de détergents." },
+  { nom: "Bactériologie", groupe: "sanitaire", unite: "n/100 mL", limite: 0, typique: 0, nbSubstances: 2, description: "Recherche d’Escherichia coli et d’entérocoques, bactéries indicatrices d’une contamination fécale." },
+  { nom: "PFAS", groupe: "sanitaire", filtres: ["PFAS"], unite: "µg/L", limite: 0.1, typique: 0.03, nbSubstances: 20, description: "Somme de 20 substances perfluoroalkylées, très persistantes dans l’environnement." },
+  { nom: "Nitrates", groupe: "sanitaire", filtres: ["Nitrates"], unite: "mg/L", limite: 50, typique: 18, description: "Issus principalement des engrais agricoles et des rejets d’eaux usées." },
+  { nom: "Nitrites", groupe: "sanitaire", filtres: ["Nitrates"], unite: "mg/L", limite: 0.5, typique: 0.02, description: "Forme intermédiaire de l’azote, surveillée en sortie de traitement." },
+  { nom: "Nitrates/50 + Nitrites/3", groupe: "sanitaire", filtres: ["Nitrates"], unite: "sans unité", limite: 1, typique: 0.4, nbSubstances: 2, description: "Indicateur combinant nitrates et nitrites, qui doit rester inférieur à 1." },
+  { nom: "Plomb", groupe: "sanitaire", unite: "µg/L", limite: 10, typique: 1.5, description: "Provient surtout des anciennes canalisations en plomb." },
   { nom: "Fluorures", groupe: "sanitaire", unite: "mg/L", limite: 1.5, typique: 0.2, description: "Présents naturellement dans certaines eaux souterraines." },
-  { nom: "Cyanures totaux", groupe: "sanitaire", unite: "µg/L", limite: 50, typique: 2, description: "Composés pouvant provenir de rejets industriels." },
-  { nom: "Bromates", groupe: "sanitaire", unite: "µg/L", limite: 10, typique: 2, description: "Sous-produits de la désinfection de l’eau par l’ozone." },
-  { nom: "Trihalométhanes (4 paramètres)", groupe: "sanitaire", unite: "µg/L", limite: 100, typique: 15, description: "Sous-produits de la chloration de l’eau.", nbSubstances: 4 },
-  { nom: "Chlorure de vinyle", groupe: "sanitaire", unite: "µg/L", limite: 0.5, typique: 0.05, description: "Peut migrer depuis certaines anciennes canalisations en PVC." },
-  { nom: "Benzène", groupe: "sanitaire", unite: "µg/L", limite: 1, typique: 0.05, description: "Composé organique d’origine industrielle." },
-  { nom: "Tétrachloroéthylène et trichloroéthylène", groupe: "sanitaire", unite: "µg/L", limite: 10, typique: 0.5, description: "Solvants chlorés d’origine industrielle." },
-  { nom: "Hydrocarbures aromatiques polycycliques (HAP)", groupe: "sanitaire", unite: "µg/L", limite: 0.1, typique: 0.005, description: "Issus de combustions incomplètes.", nbSubstances: 4 },
+  { nom: "Turbidité", groupe: "sanitaire", unite: "NFU", limite: 1, typique: 0.2, description: "Mesure de la limpidité de l’eau en sortie de traitement." },
+  { nom: "Trihalométhanes (THM4)", groupe: "sanitaire", unite: "µg/L", limite: 100, typique: 15, nbSubstances: 4, description: "Sous-produits de la chloration de l’eau." },
+  { nom: "1,2-dichloroéthane", groupe: "sanitaire", unite: "µg/L", limite: 3, typique: 0.1, description: "Solvant chloré d’origine industrielle." },
+  { nom: "AHA (acides haloacétiques)", groupe: "sanitaire", unite: "µg/L", limite: 60, typique: 5, nbSubstances: 5, description: "Sous-produits de la désinfection de l’eau." },
   { nom: "Acrylamide", groupe: "sanitaire", unite: "µg/L", limite: 0.1, typique: 0.01, description: "Résidu possible de produits de traitement de l’eau." },
-  { nom: "Microcystines", groupe: "sanitaire", unite: "µg/L", limite: 1, typique: 0.05, description: "Toxines produites par certaines cyanobactéries." },
-  { nom: "Escherichia coli", groupe: "sanitaire", famille: "Bactéries", unite: "n/100 mL", limite: 0, typique: 0, description: "Bactérie indicatrice d’une contamination fécale." },
-  { nom: "Entérocoques intestinaux", groupe: "sanitaire", famille: "Bactéries", unite: "n/100 mL", limite: 0, typique: 0, description: "Bactéries indicatrices d’une contamination fécale." },
+  { nom: "Antimoine", groupe: "sanitaire", unite: "µg/L", limite: 10, typique: 0.5, description: "Peut provenir de certains matériaux au contact de l’eau." },
+  { nom: "Arsenic", groupe: "sanitaire", unite: "µg/L", limite: 10, typique: 2, description: "Élément naturellement présent dans certains sols." },
+  { nom: "Benzo(a)pyrène", groupe: "sanitaire", unite: "µg/L", limite: 0.01, typique: 0.001, description: "Hydrocarbure issu de combustions incomplètes." },
+  { nom: "Benzène", groupe: "sanitaire", unite: "µg/L", limite: 1, typique: 0.05, description: "Composé organique d’origine industrielle." },
+  { nom: "Bisphénol A", groupe: "sanitaire", unite: "µg/L", limite: 2.5, typique: 0.05, description: "Perturbateur endocrinien pouvant migrer depuis certains matériaux." },
+  { nom: "Bore", groupe: "sanitaire", unite: "mg/L", limite: 1.5, typique: 0.05, description: "Élément d’origine naturelle ou issu de détergents." },
+  { nom: "Bromates", groupe: "sanitaire", unite: "µg/L", limite: 10, typique: 2, description: "Sous-produits de la désinfection de l’eau par l’ozone." },
+  { nom: "Cadmium", groupe: "sanitaire", unite: "µg/L", limite: 5, typique: 0.2, description: "Métal pouvant provenir de rejets industriels." },
+  { nom: "Chlorates", groupe: "sanitaire", filtres: ["Chlore"], unite: "µg/L", limite: 250, typique: 30, description: "Sous-produits de la désinfection au dioxyde de chlore." },
+  { nom: "Chlorites", groupe: "sanitaire", filtres: ["Chlore"], unite: "µg/L", limite: 250, typique: 20, description: "Sous-produits de la désinfection au dioxyde de chlore." },
+  { nom: "Chlorure de vinyle", groupe: "sanitaire", unite: "µg/L", limite: 0.5, typique: 0.05, description: "Peut migrer depuis certaines anciennes canalisations en PVC." },
+  { nom: "Chrome total et hexavalent", groupe: "sanitaire", unite: "µg/L", limite: 25, typique: 1, nbSubstances: 2, description: "Métal d’origine naturelle ou industrielle." },
+  { nom: "Cuivre", groupe: "sanitaire", unite: "mg/L", limite: 2, typique: 0.05, description: "Provient principalement des canalisations intérieures en cuivre." },
+  { nom: "Cyanures totaux", groupe: "sanitaire", unite: "µg/L", limite: 50, typique: 2, description: "Composés pouvant provenir de rejets industriels." },
+  { nom: "HAP (HPAT4)", groupe: "sanitaire", unite: "µg/L", limite: 0.1, typique: 0.005, nbSubstances: 4, description: "Hydrocarbures aromatiques polycycliques, issus de combustions incomplètes." },
+  { nom: "Mercure", groupe: "sanitaire", unite: "µg/L", limite: 1, typique: 0.05, description: "Métal toxique, rarement détecté dans l’eau du robinet." },
+  { nom: "Microcystines totales", groupe: "sanitaire", unite: "µg/L", limite: 1, typique: 0.05, description: "Toxines produites par certaines cyanobactéries." },
+  { nom: "Nickel", groupe: "sanitaire", unite: "µg/L", limite: 20, typique: 2, description: "Peut provenir de la robinetterie." },
+  { nom: "Sélénium", groupe: "sanitaire", unite: "µg/L", limite: 20, typique: 1, description: "Élément présent naturellement dans certaines nappes." },
+  { nom: "Tri + tétrachloroéthylène", groupe: "sanitaire", unite: "µg/L", limite: 10, typique: 0.5, nbSubstances: 2, description: "Solvants chlorés d’origine industrielle." },
   { nom: "Uranium", groupe: "sanitaire", unite: "µg/L", limite: 30, typique: 1, description: "Élément radioactif naturel présent dans certaines roches." },
+  { nom: "Épichlorhydrine", groupe: "sanitaire", unite: "µg/L", limite: 0.1, typique: 0.01, description: "Résidu possible de certains revêtements de canalisations." },
 
-  { nom: "Chlore libre", groupe: "reference", famille: "Chlore", unite: "mg/L", typique: 0.2, description: "Désinfectant résiduel garantissant la qualité de l’eau jusqu’au robinet." },
-  { nom: "Chlore total", groupe: "reference", famille: "Chlore", unite: "mg/L", typique: 0.3, description: "Chlore libre et chlore combiné." },
-  { nom: "Turbidité", groupe: "reference", unite: "NFU", limite: 2, typique: 0.3, description: "Mesure de la limpidité de l’eau." },
-  { nom: "Couleur", groupe: "reference", unite: "mg/L Pt", limite: 15, typique: 2, description: "Coloration de l’eau, souvent liée à la matière organique." },
-  { nom: "Aluminium", groupe: "reference", famille: "Métaux", unite: "µg/L", limite: 200, typique: 20, description: "Peut provenir des produits de traitement de l’eau." },
+  { nom: "Chlore libre", groupe: "reference", filtres: ["Chlore"], unite: "mg/L", typique: 0.2, description: "Désinfectant résiduel garantissant la qualité de l’eau jusqu’au robinet." },
+  { nom: "Saveur", groupe: "reference", filtres: ["Goût", "Odeur"], unite: "taux de dilution", limite: 3, typique: 1, description: "Goût et odeur de l’eau, évalués par un panel (taux de dilution avant disparition)." },
+  { nom: "Aluminium total", groupe: "reference", unite: "µg/L", limite: 200, typique: 20, description: "Peut provenir des produits de traitement de l’eau." },
   { nom: "Ammonium", groupe: "reference", unite: "mg/L", limite: 0.1, typique: 0.02, description: "Indicateur d’une pollution organique." },
-  { nom: "Fer total", groupe: "reference", famille: "Métaux", unite: "µg/L", limite: 200, typique: 15, description: "Peut colorer l’eau et provenir des canalisations." },
-  { nom: "Manganèse", groupe: "reference", famille: "Métaux", unite: "µg/L", limite: 50, typique: 3, description: "Élément naturel pouvant colorer l’eau." },
-  { nom: "Sulfates", groupe: "reference", unite: "mg/L", limite: 250, typique: 45, description: "Sels minéraux d’origine naturelle." },
-  { nom: "Chlorures", groupe: "reference", unite: "mg/L", limite: 250, typique: 40, description: "Sels minéraux donnant un goût salé au-delà d’un certain seuil." },
+  { nom: "Aspect", groupe: "reference", filtres: ["Couleur"], unite: "classe (0 = normal)", typique: 0, description: "Examen visuel de l’eau : limpidité, présence de particules." },
+  { nom: "Bactéries coliformes", groupe: "reference", unite: "n/100 mL", limite: 0, typique: 0, description: "Indicateur de l’efficacité du traitement." },
+  { nom: "Bactéries et spores sulfito-réductrices", groupe: "reference", unite: "n/100 mL", limite: 0, typique: 0, description: "Indicateur de l’efficacité de la filtration." },
+  { nom: "Baryum", groupe: "reference", unite: "mg/L", limite: 0.7, typique: 0.05, description: "Élément d’origine naturelle." },
   { nom: "Carbone organique total", groupe: "reference", unite: "mg/L", limite: 2, typique: 1, description: "Quantité de matière organique dans l’eau." },
-  { nom: "Bactéries coliformes", groupe: "reference", famille: "Bactéries", unite: "n/100 mL", limite: 0, typique: 0, description: "Indicateur de l’efficacité du traitement." },
-  { nom: "Bactéries sulfito-réductrices", groupe: "reference", famille: "Bactéries", unite: "n/100 mL", limite: 0, typique: 0, description: "Indicateur de l’efficacité de la filtration." },
-  { nom: "Germes revivifiables à 22 °C", groupe: "reference", famille: "Bactéries", unite: "n/mL", typique: 3, description: "Flore bactérienne générale de l’eau." },
-  { nom: "Germes revivifiables à 36 °C", groupe: "reference", famille: "Bactéries", unite: "n/mL", typique: 1, description: "Flore bactérienne générale de l’eau." },
-  { nom: "Conductivité à 25 °C", groupe: "reference", unite: "µS/cm", limite: 1100, typique: 620, description: "Mesure de la minéralisation de l’eau." },
-  { nom: "Sodium", groupe: "reference", unite: "mg/L", limite: 200, typique: 22, description: "Sel minéral naturellement présent dans l’eau." },
+  { nom: "Chlore total", groupe: "reference", filtres: ["Chlore"], unite: "mg/L", typique: 0.3, description: "Chlore libre et chlore combiné." },
+  { nom: "Chlorures", groupe: "reference", unite: "mg/L", limite: 250, typique: 40, description: "Sels minéraux donnant un goût salé au-delà d’un certain seuil." },
+  { nom: "Couleur", groupe: "reference", filtres: ["Couleur"], unite: "mg/L Pt", limite: 15, typique: 2, description: "Coloration de l’eau, souvent liée à la matière organique." },
+  { nom: "Fer total", groupe: "reference", unite: "µg/L", limite: 200, typique: 15, description: "Peut colorer l’eau et provenir des canalisations." },
+  { nom: "Germes revivifiables à 22 °C", groupe: "reference", unite: "n/mL", typique: 3, description: "Flore bactérienne générale de l’eau." },
+  { nom: "Germes revivifiables à 36 °C", groupe: "reference", unite: "n/mL", typique: 1, description: "Flore bactérienne générale de l’eau." },
+  { nom: "Manganèse total", groupe: "reference", unite: "µg/L", limite: 50, typique: 3, description: "Élément naturel pouvant colorer l’eau." },
 
-  { nom: "Calcium", groupe: "caracteristique", famille: "Dureté", unite: "mg/L", typique: 105, description: "Principal responsable du calcaire." },
-  { nom: "Magnésium", groupe: "caracteristique", famille: "Dureté", unite: "mg/L", typique: 9, description: "Minéral contribuant à la dureté de l’eau." },
-  { nom: "Potassium", groupe: "caracteristique", unite: "mg/L", typique: 4, description: "Sel minéral naturellement présent dans l’eau." },
+  { nom: "Calcium", groupe: "caracteristique", filtres: ["Dureté"], unite: "mg/L", typique: 105, description: "Principal responsable du calcaire." },
+  { nom: "Conductivité à 25 °C", groupe: "caracteristique", unite: "µS/cm", limite: 1100, typique: 620, description: "Mesure de la minéralisation de l’eau." },
+  { nom: "Magnésium", groupe: "caracteristique", filtres: ["Dureté"], unite: "mg/L", typique: 9, description: "Minéral contribuant à la dureté de l’eau." },
+  { nom: "Sodium", groupe: "caracteristique", unite: "mg/L", limite: 200, typique: 22, description: "Sel minéral naturellement présent dans l’eau." },
+  { nom: "Température de l’eau", groupe: "caracteristique", unite: "°C", limite: 25, typique: 14, description: "Température mesurée au moment du prélèvement." },
+  { nom: "Titre alcalimétrique complet (TAC)", groupe: "caracteristique", filtres: ["Dureté"], unite: "°f", typique: 24, description: "Teneur en bicarbonates, liée au pouvoir tampon de l’eau." },
   { nom: "pH", groupe: "caracteristique", unite: "unité pH", typique: 7.4, description: "Mesure de l’acidité de l’eau (entre 6,5 et 9 pour une eau de bonne qualité)." },
-  { nom: "Température de l’eau", groupe: "caracteristique", unite: "°C", typique: 14, description: "Température mesurée au moment du prélèvement." },
-  { nom: "Titre alcalimétrique complet (TAC)", groupe: "caracteristique", unite: "°f", typique: 24, description: "Teneur en bicarbonates, liée au pouvoir tampon de l’eau." },
-  { nom: "Hydrogénocarbonates", groupe: "caracteristique", unite: "mg/L", typique: 290, description: "Sels minéraux d’origine naturelle." },
+  { nom: "Équilibre calcocarbonique", groupe: "caracteristique", filtres: ["Dureté"], unite: "indice de saturation", typique: 0.1, description: "Indique si l’eau est entartrante ou agressive pour les canalisations." },
 
   { nom: "Tritium", groupe: "radioactivite", unite: "Bq/L", limite: 100, typique: 5, description: "Isotope radioactif de l’hydrogène." },
   { nom: "Activité alpha globale", groupe: "radioactivite", unite: "Bq/L", limite: 0.1, typique: 0.03, description: "Indicateur de radioactivité naturelle." },
-  { nom: "Activité bêta globale résiduelle", groupe: "radioactivite", unite: "Bq/L", limite: 1, typique: 0.1, description: "Indicateur de radioactivité." },
+  { nom: "Activité bêta globale", groupe: "radioactivite", unite: "Bq/L", limite: 1, typique: 0.1, description: "Indicateur de radioactivité." },
   { nom: "Dose indicative", groupe: "radioactivite", unite: "mSv/an", limite: 0.1, typique: 0.01, description: "Exposition annuelle estimée liée à la consommation de l’eau." },
+  { nom: "Radionucléides", groupe: "radioactivite", unite: "Bq/L", typique: 0.05, description: "Recherche de radionucléides spécifiques lorsque les indicateurs globaux sont élevés." },
+  { nom: "Radon", groupe: "radioactivite", unite: "Bq/L", limite: 100, typique: 15, description: "Gaz radioactif naturel, présent dans certaines eaux souterraines (valeur de référence : 100 Bq/L)." },
+
+  { nom: "Perchlorates", groupe: "surveillance", unite: "µg/L", limite: 15, typique: 2, description: "Ions d’origine industrielle ou militaire, suivis par précaution." },
+  { nom: "17-bêta-estradiol", groupe: "surveillance", unite: "ng/L", limite: 1, typique: 0.1, description: "Hormone, perturbateur endocrinien inscrit sur la liste de vigilance européenne (valeur indicative : 1 ng/L)." },
+  { nom: "Nonylphénol", groupe: "surveillance", unite: "ng/L", limite: 300, typique: 20, description: "Perturbateur endocrinien inscrit sur la liste de vigilance européenne (valeur indicative : 300 ng/L)." },
 ];
 
 const identifiant = (nom: string) =>
@@ -163,7 +191,7 @@ const PESTICIDES: Parametre = {
   id: "pesticides",
   nom: "Pesticides",
   groupe: "sanitaire",
-  famille: "Pesticides",
+  filtres: ["Pesticides"],
   nbSubstances: 256,
   description:
     "Résidus de produits phytosanitaires (herbicides, fongicides) et de leurs dérivés de dégradation.",
@@ -193,7 +221,7 @@ const DURETE: Parametre = {
   id: "durete",
   nom: "Dureté",
   groupe: "caracteristique",
-  famille: "Dureté",
+  filtres: ["Dureté"],
   description: "Quantité de calcium et de magnésium dans l’eau. Une eau dure n’est pas dangereuse pour la santé.",
   indicateurs: [
     {
@@ -230,7 +258,7 @@ function generer(definition: Definition, codeUdi: string): Parametre {
     id,
     nom: definition.nom,
     groupe: definition.groupe,
-    famille: definition.famille,
+    filtres: definition.filtres,
     nbSubstances: definition.nbSubstances,
     description: definition.description,
     indicateurs: [
@@ -239,6 +267,7 @@ function generer(definition: Definition, codeUdi: string): Parametre {
         nom: definition.nom,
         unite: definition.unite,
         limite,
+        seuil: definition.groupe === "sanitaire" ? "limite" : definition.groupe === "surveillance" ? "indicative" : "reference",
         description: definition.description,
         mesures: serie(valeurs.map((v) => Number(v.toFixed(precision)))),
       },
@@ -258,7 +287,9 @@ export function parametresDeLUdi(codeUdi: string): Parametre[] {
   const surveille = candidats[Math.floor(aleatoire(codeUdi)() * candidats.length)];
   const mesures = surveille.indicateurs[0].mesures;
   mesures[mesures.length - 1] = { ...mesures[mesures.length - 1], valeur: Number(((surveille.indicateurs[0].limite ?? 0) * 0.85).toPrecision(2)) };
-  const parametres = [PESTICIDES, ...generes, DURETE];
+  // Ordre de la maquette : Pesticides en tête des paramètres sanitaires, Dureté en tête des caractéristiques.
+  const indexCalcium = generes.findIndex((p) => p.id === "calcium");
+  const parametres = [PESTICIDES, ...generes.slice(0, indexCalcium), DURETE, ...generes.slice(indexCalcium)];
   cache.set(codeUdi, parametres);
   return parametres;
 }
@@ -281,8 +312,6 @@ export function etatParametre(parametre: Parametre): EtatParametre {
   );
   return proche ? "surveiller" : "conforme";
 }
-
-export const FAMILLES = ["Nitrates", "Pesticides", "PFAS", "Dureté", "Chlore", "Plomb", "Bactéries", "Métaux"];
 
 /** Format français : virgule décimale. */
 export function formaterValeur(valeur: number) {
