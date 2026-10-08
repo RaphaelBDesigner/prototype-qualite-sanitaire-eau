@@ -7,7 +7,7 @@ import { VoletCalcaire } from "../components/VoletCalcaire";
 export function Accueil() {
   return (
     <>
-      <section className="accueil-intro">
+      <section className="fr-background-alt--blue-france">
         <div className={fr.cx("fr-container", "fr-py-6w")}>
           <div className={fr.cx("fr-grid-row", "fr-grid-row--gutters", "fr-grid-row--middle")}>
             <div className={fr.cx("fr-col-12", "fr-col-lg-6")}>

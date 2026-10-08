@@ -5,10 +5,6 @@
 
 /* ---------- Accueil ---------- */
 
-.accueil-intro {
-  background-color: var(--background-alt-blue-france);
-}
-
 .bloc-recherche {
   background-color: var(--background-default-grey);
   box-shadow: var(--raised-shadow);

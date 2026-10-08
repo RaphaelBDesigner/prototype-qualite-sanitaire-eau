@@ -39,27 +39,29 @@ const ARTICLES = [
 
 export function ArticlesQualite() {
   return (
-    <section className={fr.cx("fr-container", "fr-py-6w")} aria-labelledby="titre-articles">
-      <h2 id="titre-articles">Mieux comprendre la qualité de l’eau</h2>
-      <div className={fr.cx("fr-grid-row", "fr-grid-row--gutters")}>
-        {ARTICLES.map((article) => (
-          <div key={article.slug} className={fr.cx("fr-col-12", "fr-col-md-6", "fr-col-lg-3")}>
-            <Card
-              title={article.titre}
-              titleAs="h3"
-              desc={article.description}
-              imageUrl={`${import.meta.env.BASE_URL}images/${article.image}`}
-              imageAlt=""
-              badge={
-                <Badge small noIcon className={fr.cx("fr-badge--purple-glycine")}>
-                  {article.theme}
-                </Badge>
-              }
-              enlargeLink
-              linkProps={{ to: `/article/${article.slug}` }}
-            />
-          </div>
-        ))}
+    <section className="fr-background-alt--blue-france" aria-labelledby="titre-articles">
+      <div className={fr.cx("fr-container", "fr-py-6w")}>
+        <h2 id="titre-articles">Mieux comprendre la qualité de l’eau</h2>
+        <div className={fr.cx("fr-grid-row", "fr-grid-row--gutters")}>
+          {ARTICLES.map((article) => (
+            <div key={article.slug} className={fr.cx("fr-col-12", "fr-col-md-6", "fr-col-lg-3")}>
+              <Card
+                title={article.titre}
+                titleAs="h3"
+                desc={article.description}
+                imageUrl={`${import.meta.env.BASE_URL}images/${article.image}`}
+                imageAlt=""
+                badge={
+                  <Badge small noIcon className={fr.cx("fr-badge--purple-glycine")}>
+                    {article.theme}
+                  </Badge>
+                }
+                enlargeLink
+                linkProps={{ to: `/article/${article.slug}` }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
