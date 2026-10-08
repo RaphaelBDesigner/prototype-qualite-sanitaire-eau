@@ -1,6 +1,7 @@
 import { Card } from "@codegouvfr/react-dsfr/Card";
 import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import { fr } from "@codegouvfr/react-dsfr";
+import { cx } from "@codegouvfr/react-dsfr/tools/cx";
 import { MiniCarteSecteur } from "./MiniCarteSecteur";
 import type { Secteur, StatutSecteur } from "../lib/secteurs";
 
@@ -14,13 +15,17 @@ type Props = {
   secteurs: Secteur[];
 };
 
-/** Carte DSFR horizontale d'un secteur de distribution (UDI), entièrement cliquable. */
+/**
+ * Carte DSFR horizontale d'un secteur de distribution (UDI), entièrement cliquable.
+ * Comme la maquette mobile, elle reste horizontale sur mobile, avec la vignette à droite (exception validée, cf. NOTES.md).
+ */
 export function CarteSecteur({ secteur, secteurs }: Props) {
   const { id, nom, communes, precision, statut } = secteur.properties;
   const badge = BADGES[statut];
   return (
     <Card
       horizontal
+      size="small"
       title={nom}
       titleAs="h3"
       desc={
@@ -31,7 +36,7 @@ export function CarteSecteur({ secteur, secteurs }: Props) {
       }
       end={
         badge && (
-          <Badge small severity={badge.severite}>
+          <Badge severity={badge.severite}>
             {badge.libelle}
           </Badge>
         )
@@ -39,7 +44,7 @@ export function CarteSecteur({ secteur, secteurs }: Props) {
       imageComponent={<MiniCarteSecteur secteurs={secteurs} idSecteur={id} />}
       enlargeLink
       linkProps={{ to: `/secteur/${id}` }}
-      className={fr.cx("fr-mb-3w")}
+      className={cx(fr.cx("fr-mb-3w"), "carte-secteur")}
     />
   );
 }
