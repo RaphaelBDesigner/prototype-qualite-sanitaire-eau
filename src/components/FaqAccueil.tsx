@@ -1,25 +1,10 @@
-import { Accordion } from "@codegouvfr/react-dsfr/Accordion";
 import { fr } from "@codegouvfr/react-dsfr";
 import { cx } from "@codegouvfr/react-dsfr/tools/cx";
 import { Link } from "react-router-dom";
-import type { ReactNode } from "react";
 import { voletCalcaire } from "./volets";
+import { QuestionFaq } from "./QuestionFaq";
 
 const CLASSES_LIEN = fr.cx("fr-link", "fr-icon-arrow-right-line", "fr-link--icon-right");
-
-/**
- * Accordéon DSFR de la FAQ. Le DSFR 1.14 ne décale le contenu (conteneur fr-collapse) qu'à partir
- * de la tablette, avec une marge négative de 0.25rem : les utilitaires fr-px-2w et fr-mx-0 appliquent
- * le même retrait (1rem) à toutes les tailles d’écran,
- * pour aligner tout le contenu sur le texte du titre.
- */
-function QuestionFaq({ label, children }: { label: string; children: NonNullable<ReactNode> }) {
-  return (
-    <Accordion label={label} titleAs="h3" classes={{ collapse: fr.cx("fr-px-2w", "fr-mx-0") }}>
-      {children}
-    </Accordion>
-  );
-}
 
 function LienArticle({ slug, children }: { slug: string; children: string }) {
   return (
