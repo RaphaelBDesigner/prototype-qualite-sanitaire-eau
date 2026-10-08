@@ -1,0 +1,45 @@
+{
+  "_source": "Contours : src/data/udi.geojson (DGS, UDI 2025). Noms, communes desservies et états : fictifs ou déduits de la position des contours, pour le prototype.",
+  "communes": {
+    "59350": {
+      "nom": "Lille",
+      "udi": ["059000545", "059000585", "059000948", "059004195", "059004194", "059000721", "059000687", "059000722"]
+    },
+    "33063": {
+      "nom": "Bordeaux",
+      "udi": ["033001214", "033002019", "033002228", "033001174", "033000493", "033000447", "033000495", "033000496", "033002237", "033000494", "033002239", "033000460", "033002240", "033002236"]
+    },
+    "69123": {
+      "nom": "Lyon",
+      "udi": ["069000229", "069000321"]
+    }
+  },
+  "udi": {
+    "059000545": { "nom": "Lille Centre", "communes": ["Lille"], "precision": "quartiers : centre-ville, Vieux-Lille, Wazemmes, Moulins, Bois-Blancs, Lille-Sud", "statut": "restriction" },
+    "059000585": { "nom": "Lille Est", "communes": ["Lille (Fives)", "Hellemmes", "Mons-en-Barœul", "Villeneuve-d’Ascq", "Marcq-en-Barœul", "Lezennes", "Ronchin", "Wattignies"], "statut": "aucune" },
+    "059000948": { "nom": "Lille Sud", "communes": ["Faches-Thumesnil"], "precision": "et le sud de la métropole", "statut": "aucune" },
+    "059004195": { "nom": "Lambersart", "communes": ["Lambersart", "Saint-André-lez-Lille", "La Madeleine", "Sequedin"], "statut": "aucune" },
+    "059004194": { "nom": "Loos – Englos", "communes": ["Loos", "Englos"], "statut": "aucune" },
+    "059000721": { "nom": "Pérenchies", "communes": ["Pérenchies", "Capinghem", "Lompret", "Prémesques"], "statut": "aucune" },
+    "059000687": { "nom": "Lille Nord-Ouest", "communes": [], "precision": "Secteur nord-ouest de la métropole lilloise", "statut": "interdiction" },
+    "059000722": { "nom": "Lille Sud-Ouest", "communes": [], "precision": "Secteur sud-ouest de la métropole lilloise", "statut": "aucune" },
+
+    "033001214": { "nom": "Bordeaux Centre", "communes": ["Bordeaux"], "precision": "quartiers : centre, Chartrons, Grand Parc, La Bastide", "statut": "restriction" },
+    "033002019": { "nom": "Bordeaux Sud", "communes": ["Bordeaux"], "precision": "quartiers : Saint-Michel, Nansouty, Belcier", "statut": "aucune" },
+    "033002228": { "nom": "Bordeaux Lac", "communes": ["Bordeaux"], "precision": "quartiers : Bordeaux Lac, Bacalan", "statut": "aucune" },
+    "033001174": { "nom": "Bordeaux Ouest", "communes": ["Bordeaux (Caudéran, Saint-Augustin)", "Mérignac", "Le Bouscat", "Bruges", "Eysines"], "statut": "aucune" },
+    "033000493": { "nom": "Rive droite", "communes": ["Floirac", "Cenon", "Lormont"], "statut": "aucune" },
+    "033000447": { "nom": "Bassens", "communes": ["Bassens"], "statut": "aucune" },
+    "033000495": { "nom": "Bègles", "communes": ["Bègles"], "statut": "aucune" },
+    "033000496": { "nom": "Talence", "communes": ["Talence"], "statut": "aucune" },
+    "033002237": { "nom": "Bordeaux Nord", "communes": [], "precision": "Secteur nord de la métropole bordelaise", "statut": "interdiction" },
+    "033000494": { "nom": "Bordeaux Nord-Est", "communes": [], "precision": "Secteur nord-est de la métropole bordelaise", "statut": "aucune" },
+    "033002239": { "nom": "Rive droite Sud", "communes": [], "precision": "Secteur sud de la rive droite", "statut": "aucune" },
+    "033000460": { "nom": "Bordeaux Sud-Est", "communes": [], "precision": "Secteur sud-est de la métropole bordelaise", "statut": "aucune" },
+    "033002240": { "nom": "Bordeaux Sud-Ouest", "communes": [], "precision": "Secteur sud-ouest de la métropole bordelaise", "statut": "aucune" },
+    "033002236": { "nom": "Talence Ouest", "communes": [], "precision": "Secteur entre Talence et Pessac", "statut": "aucune" },
+
+    "069000229": { "nom": "Lyon Est", "communes": [], "precision": "Secteur est de la métropole lyonnaise", "statut": "aucune" },
+    "069000321": { "nom": "Lyon Ouest", "communes": [], "precision": "Secteur ouest de la métropole lyonnaise", "statut": "restriction" }
+  }
+}

@@ -62,6 +62,9 @@ export function CarteIgn({ children, surCarte, emprise, onPrete, sansControles, 
         center={emprise ? undefined : VUE_FRANCE.centre}
         zoom={emprise ? undefined : VUE_FRANCE.zoom}
         bounds={emprise}
+        // Marges du cadrage initial : les zones ne passent ni sous le bouton retour ni sous la légende.
+        boundsOptions={{ paddingTopLeft: [16, 64], paddingBottomRight: [16, 56] }}
+        zoomSnap={0.25}
         zoomControl={false}
         attributionControl={false}
       >

@@ -29,10 +29,14 @@ export function CarteSecteur({ secteur, secteurs }: Props) {
       title={nom}
       titleAs="h3"
       desc={
-        <>
-          <strong>{communes.join(", ")}</strong>
-          {precision && ` (${precision})`}
-        </>
+        communes.length > 0 ? (
+          <>
+            <strong>{communes.join(", ")}</strong>
+            {precision && ` (${precision})`}
+          </>
+        ) : (
+          precision
+        )
       }
       end={
         badge && (

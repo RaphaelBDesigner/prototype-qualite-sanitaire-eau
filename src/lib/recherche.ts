@@ -8,9 +8,6 @@ export type Suggestion = {
   detail: string;
 };
 
-/** Communes pour lesquelles le prototype contient des données (code INSEE). */
-export const COMMUNES_AVEC_DONNEES = ["59350"];
-
 const NB_MAX_SUGGESTIONS = 8;
 
 /** Minuscules, sans accents, tirets et apostrophes remplacés par des espaces. */

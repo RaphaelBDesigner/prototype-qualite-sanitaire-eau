@@ -4,8 +4,8 @@ import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
 import { Alert } from "@codegouvfr/react-dsfr/Alert";
 import { fr } from "@codegouvfr/react-dsfr";
 import { ChampSuggestions } from "./ChampSuggestions";
-import { chercherCommunes, COMMUNES_AVEC_DONNEES, type Suggestion } from "../lib/recherche";
-import { communeContenant } from "../lib/secteurs";
+import { chercherCommunes, type Suggestion } from "../lib/recherche";
+import { communeContenant, COMMUNES_AVEC_DONNEES, NOMS_COMMUNES_AVEC_DONNEES } from "../lib/secteurs";
 
 type Props = {
   /** Appelé avec la position de l'utilisateur, pour centrer la carte et poser un marqueur. */
@@ -23,7 +23,7 @@ export function RechercheCarte({ onLocalisation }: Props) {
 
   function onSelection(suggestion: Suggestion) {
     if (COMMUNES_AVEC_DONNEES.includes(suggestion.id)) navigate(`/commune/${suggestion.id}`);
-    else setMessageRecherche(`Les données de ${suggestion.libelle} ne sont pas disponibles dans ce prototype. Essayez avec Lille.`);
+    else setMessageRecherche(`Les données de ${suggestion.libelle} ne sont pas disponibles dans ce prototype. Essayez avec ${NOMS_COMMUNES_AVEC_DONNEES}.`);
   }
 
   function utiliserMaPosition() {
@@ -42,7 +42,7 @@ export function RechercheCarte({ onLocalisation }: Props) {
         else
           setMessagePosition({
             severite: "info",
-            texte: "Les données de votre commune ne sont pas disponibles dans ce prototype. Essayez avec Lille.",
+            texte: `Les données de votre commune ne sont pas disponibles dans ce prototype. Essayez avec ${NOMS_COMMUNES_AVEC_DONNEES}.`,
           });
       },
       (erreur) => {

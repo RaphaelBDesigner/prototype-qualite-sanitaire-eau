@@ -10,10 +10,16 @@ import { CarteIgn } from "../components/CarteIgn";
 import { CarteSecteur } from "../components/CarteSecteur";
 import { LegendeZone } from "../components/LegendeZone";
 import { EnConstruction } from "./EnConstruction";
-import { emprise, secteursDeLaCommune, type ProprietesSecteur } from "../lib/secteurs";
+import { emprise, secteursDeLaCommune, type ProprietesSecteur, type Secteur } from "../lib/secteurs";
 import { useRetour } from "../lib/useRetour";
 
 const STYLE_ZONE: PathOptions = { className: "carte-ign__zone" };
+
+/** Surface approximative (emprise) d'un secteur, pour l'ordre d'affichage. */
+function etendue(secteur: Secteur) {
+  const [ouest, sud, est, nord] = emprise([secteur]);
+  return (est - ouest) * (nord - sud);
+}
 
 export function ChoixSecteur() {
   const { code = "" } = useParams();
@@ -32,6 +38,8 @@ export function ChoixSecteur() {
 
   if (!donnees) return <EnConstruction titre="Données non disponibles pour cette commune" />;
   const { commune, secteurs } = donnees;
+  // Les UDI peuvent se chevaucher : les plus étendues sont dessinées d'abord, pour garder les petites cliquables.
+  const secteursParTaille = [...secteurs].sort((a, b) => etendue(b) - etendue(a));
 
   // Clic sur une zone : même destination que la carte du secteur correspondant (alternative clavier : la liste).
   const surChaqueZone = (zone: Feature, couche: Layer) => {
@@ -44,6 +52,8 @@ export function ChoixSecteur() {
     <EcranCarte
       carte={
         <CarteIgn
+          // Nouvelle carte (emprise et zones) à chaque changement de commune.
+          key={code}
           className="carte-ign--secteurs"
           sansControles
           emprise={empriseCarte}
@@ -61,7 +71,7 @@ export function ChoixSecteur() {
             </>
           }
         >
-          <GeoJSON data={{ type: "FeatureCollection", features: secteurs } as FeatureCollection} style={STYLE_ZONE} onEachFeature={surChaqueZone} />
+          <GeoJSON data={{ type: "FeatureCollection", features: secteursParTaille } as FeatureCollection} style={STYLE_ZONE} onEachFeature={surChaqueZone} />
         </CarteIgn>
       }
       panneau={

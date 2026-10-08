@@ -7,10 +7,10 @@ import { ChampSuggestions } from "./ChampSuggestions";
 import {
   chercherCommunes,
   chercherLieuxBaignade,
-  COMMUNES_AVEC_DONNEES,
   type Suggestion,
   type TypeEau,
 } from "../lib/recherche";
+import { COMMUNES_AVEC_DONNEES, NOMS_COMMUNES_AVEC_DONNEES } from "../lib/secteurs";
 
 const CHAMP_PAR_TYPE = {
   potable: {
@@ -37,7 +37,7 @@ export function RechercheLieu() {
     } else if (COMMUNES_AVEC_DONNEES.includes(suggestion.id)) {
       navigate(`/commune/${suggestion.id}`);
     } else {
-      setMessage(`Les données de ${suggestion.libelle} ne sont pas disponibles dans ce prototype. Essayez avec Lille.`);
+      setMessage(`Les données de ${suggestion.libelle} ne sont pas disponibles dans ce prototype. Essayez avec ${NOMS_COMMUNES_AVEC_DONNEES}.`);
     }
   }
 
