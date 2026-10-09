@@ -52,6 +52,12 @@ export function anneaux(secteur: Secteur): Position[][] {
   return secteur.geometry.coordinates.map((polygone) => polygone[0]);
 }
 
+/** Page d'une commune : choix du secteur si plusieurs UDI la desservent, sinon directement la fiche de son UDI. */
+export function routeCommune(codeInsee: string) {
+  const codes = COMMUNES[codeInsee]?.udi ?? [];
+  return codes.length === 1 ? `/secteur/${codes[0]}` : `/commune/${codeInsee}`;
+}
+
 /** Emprise [ouest, sud, est, nord] d'une liste de secteurs. */
 export function emprise(secteurs: Secteur[]): [number, number, number, number] {
   const points = secteurs.flatMap((secteur) => anneaux(secteur).flat());

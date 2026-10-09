@@ -9,7 +9,7 @@ import { MesureQualite } from "../components/MesureQualite";
 import { VotreSecteur } from "../components/VotreSecteur";
 import { ContactsUtiles } from "../components/ContactsUtiles";
 import { QuestionFaq } from "../components/QuestionFaq";
-import { secteurParCode, type StatutSecteur } from "../lib/secteurs";
+import { routeCommune, secteurParCode, type StatutSecteur } from "../lib/secteurs";
 import { infosCommune } from "../lib/communes";
 
 const CONCLUSIONS: Record<StatutSecteur, ReactNode> = {
@@ -43,7 +43,7 @@ export function FicheSecteur() {
       <div className={fr.cx("fr-container", "fr-pt-3w", "fr-pb-6w")}>
         <div className={fr.cx("fr-grid-row")}>
           <div className={fr.cx("fr-col-12", "fr-col-lg-8")}>
-            <Link to={`/commune/${codeCommune}`} className={fr.cx("fr-link", "fr-icon-arrow-left-line", "fr-link--icon-left")}>
+            <Link to={routeCommune(codeCommune) === `/commune/${codeCommune}` ? `/commune/${codeCommune}` : "/carte"} className={fr.cx("fr-link", "fr-icon-arrow-left-line", "fr-link--icon-left")}>
               Changer d’adresse
             </Link>
             <h1 className={fr.cx("fr-mt-3w", "fr-mb-1w")}>{nom}</h1>

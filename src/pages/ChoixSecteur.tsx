@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { GeoJSON } from "react-leaflet";
 import type { Layer, PathOptions } from "leaflet";
 import type { Feature, FeatureCollection } from "geojson";
@@ -37,6 +37,7 @@ export function ChoixSecteur() {
   }, [donnees]);
 
   if (!donnees) return <EnConstruction titre="Données non disponibles pour cette commune" />;
+  if (donnees.secteurs.length === 1) return <Navigate to={`/secteur/${donnees.secteurs[0].properties.id}`} replace />;
   const { commune, secteurs } = donnees;
   // Les UDI peuvent se chevaucher : les plus étendues sont dessinées d'abord, pour garder les petites cliquables.
   const secteursParTaille = [...secteurs].sort((a, b) => etendue(b) - etendue(a));

@@ -10,7 +10,7 @@ import {
   type Suggestion,
   type TypeEau,
 } from "../lib/recherche";
-import { COMMUNES_AVEC_DONNEES, NOMS_COMMUNES_AVEC_DONNEES } from "../lib/secteurs";
+import { COMMUNES_AVEC_DONNEES, NOMS_COMMUNES_AVEC_DONNEES, routeCommune } from "../lib/secteurs";
 
 const CHAMP_PAR_TYPE = {
   potable: {
@@ -35,7 +35,7 @@ export function RechercheLieu() {
     if (typeEau === "baignade") {
       setMessage(`Le parcours baignade n’est pas encore disponible dans ce prototype (${suggestion.libelle}).`);
     } else if (COMMUNES_AVEC_DONNEES.includes(suggestion.id)) {
-      navigate(`/commune/${suggestion.id}`);
+      navigate(routeCommune(suggestion.id));
     } else {
       setMessage(`Les données de ${suggestion.libelle} ne sont pas disponibles dans ce prototype. Essayez avec ${NOMS_COMMUNES_AVEC_DONNEES}.`);
     }
