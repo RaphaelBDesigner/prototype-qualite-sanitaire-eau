@@ -1,6 +1,6 @@
-// Corrige l'export des UDI (donnees-sources/dgs_metropole_udi_2025_j.json) et écrit src/data/udi.geojson en WGS 84.
+// Prépare src/data/udi.geojson (WGS 84) à partir des exports d'UDI de donnees-sources/.
 //
-// L'export d'origine est décalé (Lille tombe vers l'île d'Oléron, Bordeaux en Andalousie) :
+// Le premier export est décalé (Lille tombe vers l'île d'Oléron, Bordeaux en Andalousie) :
 // des coordonnées Web Mercator (EPSG:3857) y ont été déclarées en Lambert 93 (EPSG:2154), puis reprojetées
 // en Web Mercator. On inverse cette double conversion : Web Mercator → degrés → Lambert 93 (mètres)
 // = coordonnées Web Mercator d'origine → degrés WGS 84.
@@ -30,17 +30,33 @@ const versLambert93 = ([lon, lat]) => {
 const arrondi = (v) => Math.round(v * 1e5) / 1e5; // ≈ 1 m
 const corriger = (point) => versDegres(versLambert93(versDegres(point))).map(arrondi);
 
-const source = JSON.parse(readFileSync(new URL("../donnees-sources/dgs_metropole_udi_2025_j.json", import.meta.url), "utf8"));
-const sortie = {
-  type: "FeatureCollection",
-  features: source.features.map((udi) => ({
-    type: "Feature",
-    properties: udi.properties,
-    geometry: {
-      type: "MultiPolygon",
-      coordinates: udi.geometry.coordinates.map((polygone) => polygone.map((anneau) => anneau.map(corriger))),
-    },
-  })),
-};
+// Sources, dans l'ordre : une UDI présente dans plusieurs fichiers prend le contour du dernier.
+//  - export d'origine (Lille, Bordeaux, Lyon), décalé et découpé par une zone circulaire : à corriger ;
+//  - export Bordeaux (coordonnées WGS 84 correctes, contours complets) : utilisé tel quel.
+const SOURCES = [
+  { fichier: "dgs_metropole_udi_2025_j.json", decale: true },
+  { fichier: "udi-bordeaux-2025.json", decale: false },
+];
+
+// Seules les UDI décrites dans src/data/secteurs.json sont gardées (taille du site).
+const secteurs = JSON.parse(readFileSync(new URL("../src/data/secteurs.json", import.meta.url), "utf8"));
+const codesUtiles = new Set(Object.keys(secteurs.udi));
+
+const parCode = new Map();
+for (const { fichier, decale } of SOURCES) {
+  const source = JSON.parse(readFileSync(new URL(`../donnees-sources/${fichier}`, import.meta.url), "utf8"));
+  const convertir = decale ? corriger : (point) => point.map(arrondi);
+  for (const udi of source.features) {
+    if (!codesUtiles.has(udi.properties.code_udi)) continue;
+    const polygones = udi.geometry.type === "Polygon" ? [udi.geometry.coordinates] : udi.geometry.coordinates;
+    parCode.set(udi.properties.code_udi, {
+      type: "Feature",
+      properties: { code_udi: udi.properties.code_udi },
+      geometry: { type: "MultiPolygon", coordinates: polygones.map((polygone) => polygone.map((anneau) => anneau.map(convertir))) },
+    });
+  }
+}
+
+const sortie = { type: "FeatureCollection", features: [...parCode.values()] };
 writeFileSync(new URL("../src/data/udi.geojson", import.meta.url), JSON.stringify(sortie));
 console.log(`${sortie.features.length} UDI écrites dans src/data/udi.geojson`);
