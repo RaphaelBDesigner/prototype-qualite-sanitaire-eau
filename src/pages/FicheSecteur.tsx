@@ -74,8 +74,7 @@ export function FicheSecteur() {
                 <p className={fr.cx("fr-text--sm", "fr-mb-0")}>{CONCLUSIONS[statut]}</p>
                 <p className={`${fr.cx("fr-text--xs", "fr-mt-2w", "fr-mb-0")} fr-text-mention--grey`}>
                   <em>
-                    Cette conclusion porte sur le prélèvement du 9 juillet 2026. Une évaluation sur une période plus longue (2 à
-                    3 mois) est envisagée à l’avenir.
+                    Cette conclusion porte sur le prélèvement du 9 juillet 2026. Une évaluation sur une période plus longue est envisagée et nécessaire pour une interprétation sanitaire.
                   </em>
                 </p>
               </CallOut>
