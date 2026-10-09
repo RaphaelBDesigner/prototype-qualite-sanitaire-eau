@@ -22,7 +22,7 @@ const ETATS: Record<
 > = {
   interdiction: {
     badge: { libelle: "Interdiction d’usage", severite: "error" },
-    depuis: "Depuis le 2 août 2026 sur décision de la préfecture.",
+    depuis: "Depuis le 2 août 2026 sur décision des autorités locales.",
     concernes: ["Toute la population"],
     usages: [
       { nom: "Alimentaire", description: "Boire, cuisiner, préparer les biberons et se brosser les dents.", autorisation: "interdit" },
@@ -32,7 +32,7 @@ const ETATS: Record<
   },
   restriction: {
     badge: { libelle: "Restriction d’usage", severite: "warning" },
-    depuis: "Depuis le 2 août 2026 sur décision de la préfecture.",
+    depuis: "Depuis le 2 août 2026 sur décision des autorités locales.",
     concernes: ["Nourrissons", "Femmes enceintes ou allaitantes", "Personnes dialysées"],
     usages: [
       { nom: "Alimentaire", description: "Boire, cuisiner, préparer les biberons et se brosser les dents.", autorisation: "deconseille" },
