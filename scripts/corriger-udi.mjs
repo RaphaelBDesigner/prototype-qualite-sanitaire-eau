@@ -32,10 +32,11 @@ const corriger = (point) => versDegres(versLambert93(versDegres(point))).map(arr
 
 // Sources, dans l'ordre : une UDI présente dans plusieurs fichiers prend le contour du dernier.
 //  - export d'origine (Lille, Bordeaux, Lyon), décalé et découpé par une zone circulaire : à corriger ;
-//  - export Bordeaux (coordonnées WGS 84 correctes, contours complets) : utilisé tel quel.
+//  - exports Bordeaux et Lille (coordonnées WGS 84 correctes, contours complets) : utilisés tels quels.
 const SOURCES = [
   { fichier: "dgs_metropole_udi_2025_j.json", decale: true },
   { fichier: "udi-bordeaux-2025.json", decale: false },
+  { fichier: "udi-lille-2025.json", decale: false },
 ];
 
 // Seules les UDI décrites dans src/data/secteurs.json sont gardées (taille du site).

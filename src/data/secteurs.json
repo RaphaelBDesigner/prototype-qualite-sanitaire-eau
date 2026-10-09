@@ -1,5 +1,5 @@
 {
-  "_source": "Contours : src/data/udi.geojson (DGS, UDI 2025 ; Bordeaux : export complet, Lille et Lyon : export d'origine corrigé). Noms, communes desservies et états : fictifs ou déduits de la position des contours, pour le prototype.",
+  "_source": "Contours : src/data/udi.geojson (DGS, UDI 2025 ; Lille et Bordeaux : exports complets, Lyon : export d'origine corrigé). Noms, communes desservies et états : fictifs ou déduits de la position des contours, pour le prototype.",
   "communes": {
     "59350": {
       "nom": "Lille",
@@ -11,7 +11,11 @@
         "059004194",
         "059000721",
         "059000687",
-        "059000722"
+        "059000722",
+        "059000552",
+        "059001294",
+        "059001296",
+        "059000657"
       ]
     },
     "33063": {
@@ -58,35 +62,43 @@
         "Mons-en-Barœul",
         "Villeneuve-d’Ascq",
         "Marcq-en-Barœul",
+        "Wasquehal",
         "Lezennes",
         "Ronchin",
-        "Wattignies"
+        "Wattignies",
+        "Templemars",
+        "Seclin"
       ],
       "statut": "aucune"
     },
     "059000948": {
       "nom": "Lille Sud",
       "communes": [
-        "Faches-Thumesnil"
+        "Faches-Thumesnil",
+        "Lesquin"
       ],
-      "precision": "et le sud de la métropole",
       "statut": "aucune"
     },
     "059004195": {
       "nom": "Lambersart",
       "communes": [
         "Lambersart",
+        "Lomme",
         "Saint-André-lez-Lille",
         "La Madeleine",
+        "Marquette-lez-Lille",
         "Sequedin"
       ],
       "statut": "aucune"
     },
     "059004194": {
-      "nom": "Loos – Englos",
+      "nom": "Loos – Haubourdin",
       "communes": [
         "Loos",
-        "Englos"
+        "Haubourdin",
+        "Englos",
+        "Santes",
+        "Hallennes-lez-Haubourdin"
       ],
       "statut": "aucune"
     },
@@ -101,15 +113,17 @@
       "statut": "aucune"
     },
     "059000687": {
-      "nom": "Lille Nord-Ouest",
-      "communes": [],
-      "precision": "Secteur nord-ouest de la métropole lilloise",
+      "nom": "Verlinghem",
+      "communes": [
+        "Verlinghem"
+      ],
       "statut": "interdiction"
     },
     "059000722": {
-      "nom": "Lille Sud-Ouest",
-      "communes": [],
-      "precision": "Secteur sud-ouest de la métropole lilloise",
+      "nom": "Emmerin",
+      "communes": [
+        "Emmerin"
+      ],
       "statut": "aucune"
     },
     "033001214": {
@@ -234,6 +248,36 @@
       "communes": [],
       "precision": "Secteur ouest de la métropole lyonnaise",
       "statut": "restriction"
+    },
+    "059000552": {
+      "statut": "aucune",
+      "nom": "Wambrechies",
+      "communes": [
+        "Wambrechies"
+      ]
+    },
+    "059001294": {
+      "statut": "aucune",
+      "nom": "Vendeville",
+      "communes": [
+        "Vendeville"
+      ]
+    },
+    "059001296": {
+      "statut": "aucune",
+      "nom": "Mélantois",
+      "communes": [
+        "Sainghin-en-Mélantois",
+        "Péronne-en-Mélantois"
+      ]
+    },
+    "059000657": {
+      "statut": "aucune",
+      "nom": "Weppes",
+      "communes": [
+        "Escobecques"
+      ],
+      "precision": "et les communes des Weppes"
     }
   }
 }
