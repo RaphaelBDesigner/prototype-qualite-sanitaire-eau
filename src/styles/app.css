@@ -165,8 +165,11 @@
  * Mise en page : carte puis panneau sur mobile, panneau à gauche et carte à droite sur desktop.
  * Le panneau du bas de la maquette n'a pas d'équivalent DSFR (cf. NOTES.md) : il est fixe, la poignée est décorative. */
 
+/* Sur mobile, la carte s'adapte à la hauteur visible (100svh : barres du navigateur affichées, ex. Safari iOS)
+ * pour que la recherche reste visible sous la carte sans défilement. */
 .ecran-carte__carte {
   height: 27.5rem;
+  height: clamp(12rem, calc(100svh - 23.5rem), 27.5rem);
 }
 
 .ecran-carte__carte:has(.carte-ign--secteurs) {

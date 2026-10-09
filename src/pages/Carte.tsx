@@ -65,12 +65,13 @@ export function Carte() {
         panneau={
           typeEau === "potable" ? (
             <>
-              <p className={fr.cx("fr-message", "fr-message--info", "fr-mb-2w")} aria-live="polite">
+              {/* Recherche en premier : visible sans défilement sur mobile, sous la carte. */}
+              <RechercheCarte onLocalisation={onLocalisation} />
+              <p className={fr.cx("fr-message", "fr-message--info", "fr-mt-2w", "fr-mb-0")} aria-live="polite">
                 {secteursVisibles
                   ? "Cliquez sur un secteur pour consulter la qualité de son eau."
                   : "Zoomez sur une ville pour afficher les secteurs de distribution."}
               </p>
-              <RechercheCarte onLocalisation={onLocalisation} />
             </>
           ) : (
             <Alert
