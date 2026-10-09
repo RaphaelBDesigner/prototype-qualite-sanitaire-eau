@@ -14,8 +14,8 @@ import { TOUS_LES_SECTEURS } from "../lib/secteurs";
 import { VUE_FRANCE } from "../lib/carte";
 import type { TypeEau } from "../lib/recherche";
 
-/** Zoom à partir duquel les secteurs de distribution s'affichent (une ville et ses alentours). */
-const ZOOM_SECTEURS = 11;
+/** Zoom à partir duquel les secteurs de distribution s’affichent (une agglomération et sa région). */
+const ZOOM_SECTEURS = 8;
 
 export function Carte() {
   const [parametres, setParametres] = useSearchParams();
