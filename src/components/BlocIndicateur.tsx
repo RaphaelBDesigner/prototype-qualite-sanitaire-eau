@@ -63,7 +63,7 @@ export function BlocIndicateur({ indicateur, statut, complement, titreAs: Titre 
             <TableauPrelevements indicateur={indicateur} index={index} onSelection={setIndex} />
           )}
           <ButtonsGroup
-            className={fr.cx("fr-mt-3w")}
+            className={`${fr.cx("fr-mt-3w")} boutons-pleine-largeur`}
             inlineLayoutWhen="always"
             buttons={[
               {

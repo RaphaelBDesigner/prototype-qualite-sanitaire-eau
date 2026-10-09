@@ -44,6 +44,7 @@
 - **Analyses** : recherche en direct (`Input`), filtres État (exclusifs entre eux) et Famille (plusieurs possibles) en `Tag` sélectionnables, cumulables ; compteur de résultats annoncé (`role="status"`) ; chaque ligne ouvre le paramètre.
 - **Paramètre** : « Évolution sur 12 mois » en `Accordion` ; Graphique / Tableau en `SegmentedControl` comme la maquette ; Précédent / Suivant déplacent le prélèvement affiché et mettent à jour la conclusion sanitaire (`CallOut`) ; sélection d'une ligne du tableau DSFR (bouton radio + style `aria-selected` natif).
 - **Dureté** : un séparateur DSFR (`hr`) précède l'« Échelle de dureté ». L'échelle est un tableau sémantique (légende et en-têtes masqués visuellement) sans la grille `fr-table`, pour coller à la maquette : libellé à gauche, plage à droite, texte `--text-mention-grey`. La ligne de la valeur mesurée est en gras sur fond `--background-alt-blue-france`, avec `aria-current` et la valeur restituée aux lecteurs d'écran. Mise en forme custom limitée aux tokens DSFR (classe `echelle-durete`).
+- **Précédent / Suivant** (cartes paramètre) : `ButtonsGroup` DSFR en ligne. La classe `boutons-pleine-largeur` donne aux deux boutons la même largeur et leur fait occuper toute la zone, comme sur la maquette. Les marges du groupe DSFR sont conservées. `buttonsEquisized` n'a pas été retenu : il cale les boutons sur le plus large, sans remplir la zone, et passait sur deux lignes.
 
 ## Assets
 

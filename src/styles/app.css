@@ -670,3 +670,19 @@
   font-weight: 700;
   color: var(--text-title-grey);
 }
+
+/* Précédent / Suivant (maquette) : deux boutons de même largeur occupant toute la zone, sur une ligne. */
+.fr-btns-group.boutons-pleine-largeur {
+  flex-wrap: nowrap;
+}
+
+.fr-btns-group.boutons-pleine-largeur > li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Les marges latérales (0.5rem) du groupe DSFR sont conservées. */
+.fr-btns-group.boutons-pleine-largeur .fr-btn {
+  width: calc(100% - 1rem);
+  justify-content: center;
+}
