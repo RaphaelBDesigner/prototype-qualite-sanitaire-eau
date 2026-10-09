@@ -95,7 +95,7 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
           ] as [FiltreEtat, string][]
         ).map(([valeur, libelle]) => (
           <li key={valeur}>
-            <Tag small pressed={filtreEtat === valeur} nativeButtonProps={{ onClick: () => setFiltreEtat(valeur) }}>
+            <Tag pressed={filtreEtat === valeur} nativeButtonProps={{ onClick: () => setFiltreEtat(valeur) }}>
               {libelle}
             </Tag>
           </li>
@@ -109,7 +109,7 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
       <ul className={fr.cx("fr-tags-group")} role="group" aria-labelledby={`${id}-parametres`}>
         {FILTRES.map((filtre) => (
           <li key={filtre}>
-            <Tag small pressed={filtres.includes(filtre)} nativeButtonProps={{ onClick: () => basculerFiltre(filtre) }}>
+            <Tag pressed={filtres.includes(filtre)} nativeButtonProps={{ onClick: () => basculerFiltre(filtre) }}>
               {filtre}
             </Tag>
           </li>
