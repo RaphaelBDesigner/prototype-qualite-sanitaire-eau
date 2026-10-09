@@ -85,6 +85,7 @@
 - **Contrôles de carte** : boutons DSFR tertiaires (zoom, réglages, retour) posés sur la carte avec un fond et une ombre DSFR. Attribution « © IGN / Géoplateforme » affichée en texte DSFR à la place du contrôle Leaflet.
 - **Cartes de secteur** : `Card` DSFR horizontale en taille `small`, comme la maquette. **Exception validée** : la carte reste horizontale dès le mobile et la vignette est à droite (le DSFR ne passe en horizontal qu'à partir de la tablette, image à gauche). Classe `carte-secteur` dans `styles/app.css`.
 - **Choix du secteur** : pas de boutons de zoom ni de réglages sur la carte, comme la maquette (déplacement et zoom restent possibles au doigt, à la souris et au clavier).
+- **Secteurs sur la carte d'exploration** (décision validée) : en eau potable, les zones des 27 UDI s'affichent à partir du zoom 11 (une ville et ses alentours), d'une seule couleur, avec le nom au survol et un clic vers la fiche du secteur ; la légende apparaît avec elles (à gauche, les boutons de zoom occupant la droite). En dessous du zoom 11, un message DSFR invite à zoomer. Seuil à ajuster si besoin (`ZOOM_SECTEURS` dans `pages/Carte.tsx`).
 - **Mode Baignade sur la carte** : carte seule et alerte DSFR « Bientôt disponible » dans le panneau (décision validée).
 - **Desktop** (pas de maquette) : panneau à gauche (environ un tiers), carte à droite (décision validée).
 
