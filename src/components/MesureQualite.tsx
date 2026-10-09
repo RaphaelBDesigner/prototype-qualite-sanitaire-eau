@@ -19,7 +19,7 @@ export function MesureQualite({ codeUdi }: { codeUdi: string }) {
       <p className={fr.cx("fr-text--sm")}>6 prélèvements, aucun dépassement</p>
       <hr className={fr.cx("fr-pb-3w")} />
       <h3 className={fr.cx("fr-text--md", "fr-text--bold", "fr-mb-1w")}>
-        Bilan 2026{" "}
+        Suivi 2026{" "}
         <Badge small noIcon as="span">
           En cours
         </Badge>
