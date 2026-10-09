@@ -644,3 +644,29 @@
 .tableau-prelevements__ligne {
   cursor: pointer;
 }
+
+/* Échelle de dureté (maquette : liste sans bordures, ligne de la valeur mesurée mise en évidence). */
+.echelle-durete {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+.echelle-durete td {
+  padding: 0.25rem 0.5rem;
+  color: var(--text-mention-grey);
+}
+
+.echelle-durete td + td {
+  text-align: right;
+}
+
+.echelle-durete__actif {
+  background-color: var(--background-alt-blue-france);
+}
+
+.echelle-durete__actif td {
+  font-weight: 700;
+  color: var(--text-title-grey);
+}
