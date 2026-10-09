@@ -1,5 +1,5 @@
 {
-  "_source": "Contours : src/data/udi.geojson (DGS, UDI 2025 ; Lille et Bordeaux : exports complets, Lyon : export d'origine corrigé). Noms, communes desservies et états : fictifs ou déduits de la position des contours, pour le prototype.",
+  "_source": "Contours : src/data/udi.geojson (DGS, UDI 2025, exports complets de Lille, Bordeaux et Lyon). Noms, communes desservies et états : fictifs ou déduits de la position des contours, pour le prototype.",
   "communes": {
     "59350": {
       "nom": "Lille",
@@ -40,8 +40,7 @@
     "69123": {
       "nom": "Lyon",
       "udi": [
-        "069000229",
-        "069000321"
+        "069000069"
       ]
     }
   },
@@ -237,18 +236,6 @@
       "precision": "Secteur entre Talence et Pessac",
       "statut": "aucune"
     },
-    "069000229": {
-      "nom": "Lyon Est",
-      "communes": [],
-      "precision": "Secteur est de la métropole lyonnaise",
-      "statut": "aucune"
-    },
-    "069000321": {
-      "nom": "Lyon Ouest",
-      "communes": [],
-      "precision": "Secteur ouest de la métropole lyonnaise",
-      "statut": "restriction"
-    },
     "059000552": {
       "statut": "aucune",
       "nom": "Wambrechies",
@@ -278,6 +265,26 @@
         "Escobecques"
       ],
       "precision": "et les communes des Weppes"
+    },
+    "069000069": {
+      "nom": "Grand Lyon",
+      "communes": [
+        "Lyon",
+        "Villeurbanne",
+        "Vénissieux",
+        "Bron",
+        "Caluire-et-Cuire",
+        "Oullins-Pierre-Bénite",
+        "Tassin-la-Demi-Lune",
+        "Écully",
+        "Sainte-Foy-lès-Lyon",
+        "Saint-Fons",
+        "Vaulx-en-Velin",
+        "Francheville",
+        "Rillieux-la-Pape",
+        "Décines-Charpieu"
+      ],
+      "statut": "aucune"
     }
   }
 }
