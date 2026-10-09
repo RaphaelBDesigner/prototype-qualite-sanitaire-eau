@@ -279,6 +279,11 @@
   box-shadow: var(--raised-shadow);
 }
 
+.carte-ign__legende--gauche {
+  right: auto;
+  left: 0.5rem;
+}
+
 .panneau-fond-carte {
   position: absolute;
   right: calc(100% + 0.5rem);

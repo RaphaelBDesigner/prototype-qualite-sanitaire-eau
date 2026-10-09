@@ -52,6 +52,9 @@ export function anneaux(secteur: Secteur): Position[][] {
   return secteur.geometry.coordinates.map((polygone) => polygone[0]);
 }
 
+/** Tous les secteurs du prototype (carte d'exploration). */
+export const TOUS_LES_SECTEURS = Object.values(SECTEURS);
+
 /** Page d'une commune : choix du secteur si plusieurs UDI la desservent, sinon directement la fiche de son UDI. */
 export function routeCommune(codeInsee: string) {
   const codes = COMMUNES[codeInsee]?.udi ?? [];

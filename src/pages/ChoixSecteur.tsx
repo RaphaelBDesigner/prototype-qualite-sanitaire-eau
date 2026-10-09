@@ -1,29 +1,18 @@
 import { useMemo } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import { GeoJSON } from "react-leaflet";
-import type { Layer, PathOptions } from "leaflet";
-import type { Feature, FeatureCollection } from "geojson";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
 import { EcranCarte } from "../components/EcranCarte";
 import { CarteIgn } from "../components/CarteIgn";
 import { CarteSecteur } from "../components/CarteSecteur";
 import { LegendeZone } from "../components/LegendeZone";
+import { ZonesSecteurs } from "../components/ZonesSecteurs";
 import { EnConstruction } from "./EnConstruction";
-import { emprise, secteursDeLaCommune, type ProprietesSecteur, type Secteur } from "../lib/secteurs";
+import { emprise, secteursDeLaCommune } from "../lib/secteurs";
 import { useRetour } from "../lib/useRetour";
-
-const STYLE_ZONE: PathOptions = { className: "carte-ign__zone" };
-
-/** Surface approximative (emprise) d'un secteur, pour l'ordre d'affichage. */
-function etendue(secteur: Secteur) {
-  const [ouest, sud, est, nord] = emprise([secteur]);
-  return (est - ouest) * (nord - sud);
-}
 
 export function ChoixSecteur() {
   const { code = "" } = useParams();
-  const navigate = useNavigate();
   const retour = useRetour("/carte");
   const donnees = secteursDeLaCommune(code);
 
@@ -39,16 +28,6 @@ export function ChoixSecteur() {
   if (!donnees) return <EnConstruction titre="Données non disponibles pour cette commune" />;
   if (donnees.secteurs.length === 1) return <Navigate to={`/secteur/${donnees.secteurs[0].properties.id}`} replace />;
   const { commune, secteurs } = donnees;
-  // Les UDI peuvent se chevaucher : les plus étendues sont dessinées d'abord, pour garder les petites cliquables.
-  const secteursParTaille = [...secteurs].sort((a, b) => etendue(b) - etendue(a));
-
-  // Clic sur une zone : même destination que la carte du secteur correspondant (alternative clavier : la liste).
-  const surChaqueZone = (zone: Feature, couche: Layer) => {
-    const { id, nom } = zone.properties as ProprietesSecteur;
-    couche.bindTooltip(nom, { sticky: true });
-    couche.on("click", () => navigate(`/secteur/${id}`));
-  };
-
   return (
     <EcranCarte
       carte={
@@ -72,7 +51,7 @@ export function ChoixSecteur() {
             </>
           }
         >
-          <GeoJSON data={{ type: "FeatureCollection", features: secteursParTaille } as FeatureCollection} style={STYLE_ZONE} onEachFeature={surChaqueZone} />
+          <ZonesSecteurs secteurs={secteurs} />
         </CarteIgn>
       }
       panneau={
