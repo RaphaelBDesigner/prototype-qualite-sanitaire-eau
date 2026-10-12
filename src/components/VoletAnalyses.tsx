@@ -17,7 +17,7 @@ type FiltreEtat = "tous" | Exclude<EtatParametre, "conforme">;
 export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
   const id = useId();
   const { empiler } = useVolets();
-  const champ = useRef<HTMLInputElement>(null);
+  const resultatsRef = useRef<HTMLParagraphElement>(null);
   const [recherche, setRecherche] = useState("");
   const [filtreEtat, setFiltreEtat] = useState<FiltreEtat>("tous");
   const [filtres, setFiltres] = useState<Filtre[]>([]);
@@ -69,19 +69,29 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
       <hr className={fr.cx("fr-mt-1w", "fr-pb-3w")} />
 
       <h2 className={fr.cx("fr-h6", "fr-mb-2w")}>Rechercher les derniers résultats d’un paramètre</h2>
-      <Input
-        label="Nom du paramètre"
-        hideLabel
-        nativeInputProps={{
-          ref: champ,
-          type: "search",
-          value: recherche,
-          placeholder: "Recherche",
-          onChange: (e) => setRecherche(e.target.value),
+      <form
+        role="search"
+        onSubmit={(e) => {
+          e.preventDefault();
+          // Sur mobile, déplacer le focus ferme le clavier virtuel et amène l'utilisateur sur les résultats.
+          resultatsRef.current?.focus();
+          resultatsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         }}
-        // Le filtrage est instantané : le bouton (présent sur la maquette) remet le focus dans le champ.
-        addon={<Button iconId="fr-icon-search-line" title="Rechercher" type="button" onClick={() => champ.current?.focus()} />}
-      />
+      >
+        <Input
+          label="Nom du paramètre"
+          hideLabel
+          nativeInputProps={{
+            enterKeyHint: "search",
+            type: "search",
+            value: recherche,
+            placeholder: "Recherche",
+            onChange: (e) => setRecherche(e.target.value),
+          }}
+          // Le filtrage est instantané : la loupe (ou la touche Entrée) valide la saisie et mène aux résultats.
+          addon={<Button iconId="fr-icon-search-line" title="Rechercher" type="submit" />}
+        />
+      </form>
 
       <p id={`${id}-etat`} className={`${fr.cx("fr-text--sm", "fr-mb-1w")} fr-text-mention--grey`}>
         État
@@ -116,7 +126,7 @@ export function VoletAnalyses({ codeUdi }: { codeUdi: string }) {
         ))}
       </ul>
 
-      <p className={fr.cx("fr-text--bold", "fr-mt-1w")} role="status">
+      <p ref={resultatsRef} tabIndex={-1} className={fr.cx("fr-text--bold", "fr-mt-1w")} role="status">
         {resultats.length} résultat{resultats.length > 1 ? "s" : ""}
       </p>
 

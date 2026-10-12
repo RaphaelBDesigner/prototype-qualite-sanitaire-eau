@@ -112,7 +112,7 @@
 - **Contact & liens utiles** : `Tile` DSFR horizontales sans bordure ; le DSFR conserve la barre bleue en bas des tuiles et place l'icône en bas à droite (la maquette montre un filet gris et l'icône au centre).
 - **« Télécharger le bilan »** : PDF fictif (`public/documents/bilan-2025.pdf`).
 - **« Vérifier mon raccordement »** : alerte DSFR « bientôt disponible », fermable (décision validée).
-- **Recherche de paramètre** : champ DSFR avec bouton loupe, comme la maquette ; le filtrage étant instantané, le bouton remet le focus dans le champ.
+- **Recherche de paramètre** : champ DSFR avec bouton loupe, comme la maquette, dans un formulaire `role="search"`. Le filtrage se fait à la saisie. La loupe ou la touche Entrée (touche « Rechercher » du clavier mobile) envoie le focus sur le nombre de résultats : sur mobile, cela ferme le clavier virtuel et fait défiler jusqu'aux résultats.
 
 ## Maquettes à compléter
 
