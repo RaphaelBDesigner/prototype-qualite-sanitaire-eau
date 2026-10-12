@@ -291,6 +291,16 @@ const PESTICIDES_CONFORMES: Parametre = {
   })),
 };
 
+/** Pesticides de Lille Centre : dépassements les 10/06 et 09/07/2026, d'où « Dépassement de limite ». */
+const UDI_LILLE_CENTRE = "059000545";
+const PESTICIDES_DEPASSEMENT: Parametre = {
+  ...PESTICIDES,
+  indicateurs: PESTICIDES.indicateurs.map((indicateur, i) => ({
+    ...indicateur,
+    mesures: serie(i === 0 ? [0.037, 0.022, 0.037, 0.037, 0.112, 0.147] : [0.041, 0.035, 0.048, 0.052, 0.071, 0.147]),
+  })),
+};
+
 /** Tous les paramètres analysés pour une UDI. */
 export function parametresDeLUdi(codeUdi: string): Parametre[] {
   const enCache = cache.get(codeUdi);
@@ -304,8 +314,23 @@ export function parametresDeLUdi(codeUdi: string): Parametre[] {
     cache.set(codeUdi, parametres);
     return parametres;
   }
-  // Secteur avec restriction ou interdiction : Pesticides (1 dépassement, « À surveiller ») et une référence de qualité
-  // choisie de façon déterministe (2 dépassements, « Dépassement de limite »).
+  // Lille Centre (secteur des maquettes) : Pesticides seul en « Dépassement de limite » (2 dépassements),
+  // Nitrates « À surveiller » (1 dépassement, le 11/03/2026).
+  if (codeUdi === UDI_LILLE_CENTRE) {
+    const nitrates = generes.find((p) => p.id === "nitrates")!.indicateurs[0];
+    const nitrites = generes.find((p) => p.id === "nitrites")!.indicateurs[0];
+    const combine = generes.find((p) => p.id === "nitrates-50-nitrites-3")!.indicateurs[0];
+    nitrates.mesures = nitrates.mesures.map((m, i) => (i === 2 ? { ...m, valeur: 53.6 } : m));
+    // L'indicateur combiné suit les nitrates et dépasse donc lui aussi 1 ce jour-là.
+    combine.mesures = combine.mesures.map((m, i) =>
+      i === 2 ? { ...m, valeur: Number((53.6 / 50 + nitrites.mesures[2].valeur / 3).toFixed(2)) } : m,
+    );
+    const parametres = [PESTICIDES_DEPASSEMENT, ...generes.slice(0, indexCalcium(generes)), DURETE, ...generes.slice(indexCalcium(generes))];
+    cache.set(codeUdi, parametres);
+    return parametres;
+  }
+  // Autres secteurs avec restriction ou interdiction : Pesticides (1 dépassement, « À surveiller ») et une référence
+  // de qualité choisie de façon déterministe (2 dépassements, « Dépassement de limite »).
   const candidats = generes.filter((p) => p.groupe === "reference" && (p.indicateurs[0].limite ?? 0) > 0);
   const choisi = candidats[Math.floor(aleatoire(codeUdi)() * candidats.length)].indicateurs[0];
   const valeurDepassement = Number(((choisi.limite ?? 0) * 1.2).toPrecision(2));

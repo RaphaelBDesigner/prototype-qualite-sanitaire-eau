@@ -98,7 +98,9 @@
 
 ## Écarts avec les maquettes — Fiche du secteur et volets
 
-- **Données** : résultats d'analyses fictifs (`src/lib/analyses.ts`). Pesticides (Chlorothalonil, dépassement le 09/07/2026) et Dureté (22,4 °f) reprennent les valeurs des maquettes ; les autres paramètres sont générés de façon déterministe par UDI. Coordonnées des mairies, captages et exploitants fictifs (`src/data/communes-infos.json`).
+- **Données** : résultats d'analyses fictifs (`src/lib/analyses.ts`). Pesticides (Chlorothalonil, dépassement le 09/07/2026) et Dureté (22,4 °f) reprennent les valeurs des maquettes ; les autres paramètres sont générés de façon déterministe par UDI.
+  - **Lille Centre (059000545)** : Pesticides est le seul paramètre en « Dépassement de limite », avec deux dépassements de Chlorothalonil R417888, le 10/06 (0,112 µg/L) et le 09/07/2026. Nitrates est « À surveiller », avec un dépassement le 11/03/2026 (53,6 mg/L). Par cohérence, l'indicateur « Nitrates/50 + Nitrites/3 » dépasse 1 ce même jour et apparaît aussi « À surveiller ».
+  - **Autres secteurs avec restriction ou interdiction** : Pesticides est « À surveiller » (un dépassement) et un paramètre de référence tiré de façon déterministe est en « Dépassement de limite ». Coordonnées des mairies, captages et exploitants fictifs (`src/data/communes-infos.json`).
 - **Détail des analyses** : aligné sur la maquette lisible `maquettes/modale-detail-analyses.pdf` (5 groupes, filtres « État » et « Paramètres », liste des paramètres). Décisions validées sur ses incohérences :
   - « Tous (n) » affiche le nombre total de paramètres (69), et non 15 ;
   - « Épichlorhydrine », présent deux fois, n'apparaît qu'une fois ;
