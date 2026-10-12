@@ -155,6 +155,11 @@
   }
 }
 
+/* Bouton « Retour » ajouté à gauche de « Fermer » dans l'en-tête de la modale (cf. NOTES.md). */
+.volet .volet__retour {
+  order: -1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .volet .fr-modal__body {
     transition: none;

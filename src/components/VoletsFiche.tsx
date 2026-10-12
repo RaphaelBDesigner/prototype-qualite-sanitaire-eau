@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { Button } from "@codegouvfr/react-dsfr/Button";
 import { voletFiche } from "./volets";
 import { ContexteVolets, type EntreeVolet } from "../lib/contexteVolets";
 import { VoletMairie } from "./VoletMairie";
@@ -28,6 +30,12 @@ export function VoletsFiche({ codeUdi, statut, infos, children }: Props) {
   const focusApresRetour = useRef<string | undefined>(undefined);
   const declencheur = useRef<string | undefined>(undefined);
   const courant = pile[pile.length - 1];
+  const [enTete, setEnTete] = useState<HTMLElement | null>(null);
+
+  // En-tête de la modale DSFR, où le bouton « Retour » est ajouté à côté de « Fermer ».
+  useEffect(() => {
+    setEnTete(document.querySelector<HTMLElement>(`#${voletFiche.id} .fr-modal__header`));
+  }, []);
 
   const ouvrir = useCallback((entree: EntreeVolet, idDeclencheur: string) => {
     declencheur.current = idDeclencheur;
@@ -96,6 +104,7 @@ export function VoletsFiche({ codeUdi, statut, infos, children }: Props) {
 
   const contexte = useMemo(() => ({ ouvrir, empiler }), [ouvrir, empiler]);
   const { titre, contenu } = rendu(courant?.entree, { codeUdi, statut, infos });
+  const precedent = pile[pile.length - 2];
 
   return (
     <ContexteVolets.Provider value={contexte}>
@@ -107,6 +116,19 @@ export function VoletsFiche({ codeUdi, statut, infos, children }: Props) {
       >
         {contenu}
       </voletFiche.Component>
+      {/* Bouton « Retour » : seulement quand on a navigué à l'intérieur du volet (pile de plus d'un niveau). */}
+      {enTete &&
+        precedent &&
+        createPortal(
+          <Button
+            className="volet__retour"
+            iconId="fr-icon-arrow-left-line"
+            priority="tertiary"
+            title={`Retour à « ${rendu(precedent.entree, { codeUdi, statut, infos }).titre} »`}
+            onClick={depiler}
+          />,
+          enTete,
+        )}
     </ContexteVolets.Provider>
   );
 }
