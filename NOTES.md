@@ -23,7 +23,7 @@
 - **« Explorer sur la carte »** : le type d'eau est transmis dans l'URL (`/carte?type=potable|baignade`).
 - **Cartes articles** : `Card` avec `enlargeLink` (survol DSFR natif).
 - **FAQ** : accordéons groupés (`fr-accordions-group`), fermés par défaut. Ouvrir une question referme la précédente (comportement DSFR natif).
-- **« Calcaire et dureté »** : volet (modale DSFR), bloc « Bon à savoir » en `CallOut`.
+- **« Calcaire et dureté »** : volet (modale DSFR), bloc « Bon à savoir » en `CallOut`. Tailles de texte de la maquette, avec les classes DSFR uniquement : titre `fr-h5`, texte et liste `fr-text--sm`, titre du CallOut `fr-text--md`, texte du CallOut `fr-text--sm`.
 - **Carte IGN** : déplacement, double-clic, pincement et clavier natifs Leaflet ; boutons +/– en `Button` tertiaires DSFR (contrôle de zoom Leaflet désactivé).
 
 ### Choix du secteur (commune à plusieurs UDI)
