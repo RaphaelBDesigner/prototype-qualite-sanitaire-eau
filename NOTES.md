@@ -40,7 +40,12 @@
 ### Volets
 - Fermeture par « Fermer », Échap ou clic sur le fond.
 - **Navigation entre volets** : une seule modale dont le contenu suit une pile. Depuis Analyses, ouvrir un paramètre puis le fermer (bouton, Échap ou clic sur le fond) revient à Analyses ; le focus revient sur la ligne cliquée.
-- **Mairie** : téléphone (`tel:`) et e-mail (`mailto:`) cliquables ; site de la mairie dans un nouvel onglet, avec titre « … – nouvelle fenêtre ».
+- **Mairie** : téléphone (`tel:`) et e-mail (`mailto:`) cliquables ; site de la mairie dans un nouvel onglet, avec titre « … – nouvelle fenêtre ». Mise en forme selon la nouvelle maquette :
+  - texte en `fr-text--sm` ;
+  - liste de définitions (`dl`) sans retrait, séparée par des filets `--border-default-grey` ;
+  - libellés gris, valeurs en gras ;
+  - liens `fr-link--sm` non soulignés au repos et soulignés au survol (même règle que les liens du footer DSFR) ;
+  - bouton tertiaire en grande taille.
 - **Analyses** : recherche en direct (`Input`), filtres État (exclusifs entre eux) et Famille (plusieurs possibles) en `Tag` sélectionnables, cumulables ; compteur de résultats annoncé (`role="status"`) ; chaque ligne ouvre le paramètre.
 - **Paramètre** : « Évolution sur 12 mois » en `Accordion` ; Graphique / Tableau en `SegmentedControl` comme la maquette ; Précédent / Suivant déplacent le prélèvement affiché et mettent à jour la conclusion sanitaire (`CallOut`) ; sélection d'une ligne du tableau DSFR (bouton radio + style `aria-selected` natif).
 - **Dureté** : un séparateur DSFR (`hr`) précède l'« Échelle de dureté ». L'échelle est un tableau sémantique (légende et en-têtes masqués visuellement) sans la grille `fr-table`, pour coller à la maquette : libellé à gauche, plage à droite, texte `--text-mention-grey`. La ligne de la valeur mesurée est en gras sur fond `--background-alt-blue-france`, avec `aria-current` et la valeur restituée aux lecteurs d'écran. Mise en forme custom limitée aux tokens DSFR (classe `echelle-durete`).

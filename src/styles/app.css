@@ -512,6 +512,7 @@
 /* Coordonnées de la mairie. */
 .liste-coordonnees {
   margin: 0 0 1.5rem;
+  padding: 0;
 }
 
 .liste-coordonnees > div {
@@ -524,12 +525,17 @@
 }
 
 .liste-coordonnees dt {
-  font-size: 0.875rem;
   color: var(--text-mention-grey);
 }
 
 .liste-coordonnees dd {
   margin: 0;
+  padding: 0;
+}
+
+/* Liens de contact sans soulignement au repos, souligné au survol : même règle que les liens du footer DSFR. */
+.liste-coordonnees a:not(:hover):not(:active) {
+  --underline-idle-width: 0;
 }
 
 /* Liste des paramètres du volet Analyses. */
