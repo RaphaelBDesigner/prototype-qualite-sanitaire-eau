@@ -40,6 +40,7 @@
 ### Volets
 - Fermeture par « Fermer », Échap ou clic sur le fond.
 - **Navigation entre volets** : une seule modale dont le contenu suit une pile. Depuis Analyses, ouvrir un paramètre puis le fermer (bouton, Échap ou clic sur le fond) revient à Analyses ; le focus revient sur la ligne cliquée.
+- **Mairie, texte d'introduction** : il dépend du statut de l'UDI. Sans restriction connue : « Pour vérifier les informations à jour, contactez votre mairie, qui dispose des dernières informations. » Sinon, la phrase précise « sur la restriction (usages, horaires, durée ou levée) ».
 - **Mairie** : téléphone (`tel:`) et e-mail (`mailto:`) cliquables ; site de la mairie dans un nouvel onglet, avec titre « … – nouvelle fenêtre ». Mise en forme selon la nouvelle maquette :
   - texte en `fr-text--sm` ;
   - liste de définitions (`dl`) sans retrait, séparée par des filets `--border-default-grey` ;

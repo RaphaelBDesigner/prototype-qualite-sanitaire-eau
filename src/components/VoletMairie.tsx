@@ -1,15 +1,18 @@
 import { ButtonsGroup } from "@codegouvfr/react-dsfr/ButtonsGroup";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { InfosCommune } from "../lib/communes";
+import type { StatutSecteur } from "../lib/secteurs";
 
 /** Volet « Suivre les informations locales » : coordonnées de la mairie. */
-export function VoletMairie({ mairie }: { mairie: InfosCommune["mairie"] }) {
+export function VoletMairie({ mairie, statut }: { mairie: InfosCommune["mairie"]; statut: StatutSecteur }) {
   const lienTel = `tel:${mairie.telephone.replace(/\s/g, "")}`;
   return (
     <>
       <p className={fr.cx("fr-text--sm")}>
-        Pour vérifier les <strong>informations à jour</strong> sur la restriction (usages, horaires, durée ou levée),{" "}
-        <strong>contactez votre mairie</strong>, qui dispose des dernières informations.
+        Pour vérifier les <strong>informations à jour</strong>
+        {/* Sans restriction connue, pas de mention de la restriction. */}
+        {statut !== "aucune" && " sur la restriction (usages, horaires, durée ou levée)"}, <strong>contactez votre mairie</strong>,
+        qui dispose des dernières informations.
       </p>
       <h2 className={fr.cx("fr-h5", "fr-mb-3w")}>Votre mairie</h2>
       <dl className={`liste-coordonnees ${fr.cx("fr-text--sm")}`}>

@@ -136,7 +136,7 @@ export function VoletsFiche({ codeUdi, statut, infos, children }: Props) {
 function rendu(entree: EntreeVolet | undefined, { codeUdi, statut, infos }: Omit<Props, "children">) {
   switch (entree?.type) {
     case "mairie":
-      return { titre: "Suivre les informations locales", contenu: <VoletMairie mairie={infos.mairie} /> };
+      return { titre: "Suivre les informations locales", contenu: <VoletMairie mairie={infos.mairie} statut={statut} /> };
     case "origine":
       return {
         titre: `Origine de cette ${statut === "interdiction" ? "interdiction" : "restriction"}`,
